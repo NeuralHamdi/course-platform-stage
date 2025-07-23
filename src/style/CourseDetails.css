@@ -1,0 +1,103 @@
+/* ---- HERO SECTION ---- */
+.course-hero {
+  position: relative;
+  height: 60vh; /* Hauteur plus importante */
+  min-height: 400px;
+  background-size: cover;
+  background-position: center center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.course-hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Dégradé pour la lisibilité du texte */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px; /* Limite la largeur du texte */
+  padding: 0 1rem;
+}
+
+.hero-content .display-4 {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  font-weight: 700;
+}
+
+.hero-content .lead {
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+/* ---- STICKY CARD ---- */
+.sticky-card {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 20px; /* Espace par rapport au haut de la page */
+  z-index: 1000;
+}
+
+/* ---- "WHAT YOU'LL LEARN" BOX ---- */
+.objectives-box {
+  background-color: #f8f9fa;
+  border-left: 5px solid var(--bs-primary);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.objectives-box ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.objectives-box ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.objectives-box ul li .bi-check-circle-fill {
+  color: var(--bs-success);
+  margin-right: 0.75rem;
+  font-size: 1.2rem;
+}
+
+/* ---- SESSION CARD HIGHLIGHT ---- */
+.session-card.highlight {
+  border: 2px solid var(--bs-primary);
+  box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.15) !important;
+}
+
+.places-restantes {
+  font-weight: bold;
+  color: var(--bs-danger);
+}
+
+/* ---- ACCORDION ---- */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    color: var(--bs-dark);
+}
+
+.accordion-item {
+    border-radius: 0.5rem !important;
+    overflow: hidden; /* Pour que le border-radius s'applique bien */
+    border: 1px solid #dee2e6;
+}
+
+
+
+

@@ -1,0 +1,99 @@
+/* ========== General Body Style ========== */
+/* Apply this in your main index.css or App.css for a global effect,
+   or just keep it here if only this page should have this background. */
+body {
+  background-color: #f8f9fa; /* A very light gray background for a softer look */
+}
+
+
+/* ========== Filter Container Styles ========== */
+.filter-container {
+  background-color: #ffffff;
+  /* The border was in my previous suggestion, but your image has a soft shadow which is better.
+     Bootstrap's "shadow-sm" class you already have is perfect for this. */
+}
+
+
+/* ========== Modern Button Styles ========== */
+.btn-action {
+  transition: all 0.3s ease; /* Crucial for smooth hover effects on buttons */
+  font-weight: 500;
+  border-radius: 0.5rem; /* Slightly more rounded corners */
+}
+
+/* Specific style for the main "Apply" button */
+.btn-primary.btn-action {
+  /* A nice purple shadow to match your button color */
+  box-shadow: 0 4px 15px rgba(102, 16, 242, 0.2);
+}
+
+.btn-primary.btn-action:hover {
+  transform: translateY(-3px); /* Lifts the button on hover */
+  box-shadow: 0 6px 20px rgba(102, 16, 242, 0.3); /* A more pronounced shadow on hover */
+}
+
+/* Style for the "Clear" button */
+.btn-outline-secondary.btn-action:hover {
+  transform: translateY(-3px); /* Lifts the button on hover */
+}
+
+
+/* ========== Card Enhancements ========== */
+/* The card itself has shadow-sm and border-0 from the JSX, which is perfect. */
+.card {
+    border-radius: 0.75rem !important; /* Smoother, more modern rounded corners */
+    overflow: hidden; /* Ensures the image respects the rounded corners */
+}
+
+.card-img-top {
+    transition: transform 0.4s ease; /* Smooth zoom effect on the image */
+}
+
+/* This is a cool effect: Zoom the image inside the card on hover */
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.card-footer-btn {
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.card-footer-btn:hover {
+  background-color: #198754; /* Darker green on hover for better feedback */
+  color: white;
+  transform: scale(1.02); /* Make the button slightly bigger on hover */
+}
+
+/* ========== Loading Spinner Animation ========== */
+/* This is for the improved loading state */
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fa-spin {
+  animation: fa-spin 1.5s infinite linear;
+}
+
+
+
+
+/* ========== Animated Background ================= */
+/* --- Optional: Animated Gradient Border on Card Hover --- */
+.gradient-border-card {
+  position: relative;
+  background-clip: padding-box; /* Important for border */
+  border: 2px solid transparent;
+}
+
+
+
+.gradient-border-card:hover::before {
+  opacity: 1;
+}
+

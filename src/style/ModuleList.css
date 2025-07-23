@@ -1,0 +1,152 @@
+/* --- Root variables for easy theme customization --- */
+:root {
+    --primary-color: #007bff;
+    --primary-color-dark: #0056b3;
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --card-border-radius: 12px;
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --section-bg: #f8f9fa;
+}
+
+/* --- Section Styling --- */
+.module-list__section {
+    background-color: var(--section-bg);
+    padding: 60px 0;
+}
+
+.module-list__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.module-list__subtitle {
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3.5rem !important; /* Overriding bootstrap margin */
+    color: var(--text-light);
+}
+
+/* --- Loader Styling --- */
+.module-list__loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+.module-list__spinner {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* --- THE NEW CARD DESIGN --- */
+
+/* This is the main card container */
+.module-list__card {
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden; /* Ensures image corners are rounded */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.module-list__card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* Container for the image to control aspect ratio */
+.module-list__card-image-container {
+    width: 100%;
+    /* Creates a 16:9 aspect ratio for the image */
+    padding-top: 56.25%; 
+    position: relative;
+}
+
+.module-list__card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Prevents image stretching */
+    transition: transform 0.4s ease;
+}
+
+.module-list__card:hover .module-list__card-img {
+    transform: scale(1.05); /* Subtle zoom on hover */
+}
+
+
+/* Styling for the card content area */
+.module-list__card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Makes the body take up remaining space */
+}
+
+.module-list__card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+    /* Prevent title from breaking card layout if too long */
+    min-height: 3rem; 
+}
+
+.module-list__card-text {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.6;
+    flex-grow: 1; /* Pushes the button to the bottom */
+    margin-bottom: 1.5rem;
+}
+
+
+/* The stylish new button */
+.module-list__card-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px; /* Pill-shaped button */
+    text-decoration: none;
+    font-weight: 500;
+    text-align: center;
+    margin-top: auto; /* Aligns to the bottom */
+    align-self: flex-start; /* Aligns to the left */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.module-list__card-button:hover {
+    background-color: var(--primary-color-dark);
+    color: #ffffff;
+    transform: translateY(-2px);
+}

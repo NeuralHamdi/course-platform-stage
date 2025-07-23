@@ -1,0 +1,100 @@
+/* src/style/CallToAction.css */
+
+/* ========== 1. The Animated Gradient Background ========== */
+.cta__section {
+  padding: 5rem 0;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  /* 
+    The magic! A multi-stop gradient that will move.
+    We use slightly muted, professional colors.
+  */
+  background: linear-gradient(-45deg, #00796b, #005f73, #023e7d, #00796b);
+  background-size: 400% 400%;
+  animation: gradient-flow 15s ease infinite;
+}
+
+/* Keyframes to animate the background-position of the gradient */
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* A subtle overlay to make text more readable */
+.cta__section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Ensure our content is on top of the overlay */
+.cta__section .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* ========== 2. Typography Styling ========== */
+.cta__title {
+  font-weight: 800;
+  font-size: 2.5rem; /* Make it impactful */
+  margin-bottom: 1rem;
+  /* Add a text-shadow for better legibility and a premium feel */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.cta__subtitle {
+  font-size: 1.15rem;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ========== 3. The "Impossible to Ignore" Button ========== */
+.cta__button {
+  background-color: white;
+  color: #00796b; /* Match the color to the background for harmony */
+  font-weight: 700;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-block; /* Required for transforms and shadows */
+  transition: all 0.3s ease;
+  
+  /* The "pulse" animation draws the eye */
+  animation: button-pulse 2s infinite;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cta__button:hover {
+  background-color: #f8f9fa;
+  /* We use framer-motion for the transform, but can add shadow here */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Keyframes for the button's subtle glowing pulse */
+@keyframes button-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5), 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0), 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0), 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+}

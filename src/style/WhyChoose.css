@@ -1,0 +1,110 @@
+/* src/style/WhyChoose.css */
+
+/* ========== 1. Main Section Styling ========== */
+.why-choose__section {
+  padding: 5rem 0;
+  position: relative;
+  /* A dark, textured background */
+  background-color: #121212;
+  background-image:
+    radial-gradient(at 20% 80%, hsla(211,60%,30%,0.3) 0px, transparent 50%),
+    radial-gradient(at 80% 20%, hsla(289,60%,30%,0.3) 0px, transparent 50%);
+  overflow: hidden;
+}
+
+.section__title {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.section__subtitle {
+  color: #adb5bd;
+  font-size: 1.1rem;
+}
+
+/* ========== 2. The Glassmorphism Card ========== */
+.why-choose__card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 2px; /* This padding creates space for our animated border */
+  border-radius: 1rem;
+  
+  /* The 3D effect on hover */
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+}
+
+/* On hover, apply the 3D tilt */
+.why-choose__card:hover {
+  transform: perspective(1000px) rotateY(5deg) rotateX(10deg) scale3d(1.05, 1.05, 1.05);
+}
+
+/* This is the shimmering, animated border */
+.why-choose__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* A conic-gradient creates the shimmer effect */
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    rgba(255, 255, 255, 0) 0deg,
+    #ffffff 200deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  animation: rotate-border 4s linear infinite;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.why-choose__card:hover::before {
+  opacity: 1; /* Make the border visible on hover */
+}
+
+/* Keyframes for the border animation */
+@keyframes rotate-border {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* The actual card content with the frosted-glass background */
+.why-choose__card-content {
+  position: relative;
+  z-index: 2;
+  background: rgba(30, 30, 30, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(20px); /* The FROSTED GLASS effect */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: inherit;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========== 3. Card Content Styling ========== */
+.why-choose__icon-wrapper {
+  margin: 0 auto 1rem auto;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007bff, #6f42c1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 0 20px rgba(111, 66, 193, 0.5);
+}
+
+.why-choose__title {
+  color: #ffffff;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.why-choose__description {
+  color: #adb5bd;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}

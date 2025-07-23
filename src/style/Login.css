@@ -1,0 +1,46 @@
+.login-page {
+  min-height: 100vh;
+ /* Adjusted for better spacing */
+  /* Background image or gradient */
+
+  background: url('../assets/hero-image.jpg') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.login-box {
+  max-width: 400px;
+  z-index: 10;
+  position: relative;
+}
+
+/* Animation suggestion (optional background gradient) */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* OPTIONAL: if you prefer gradient animated bg instead of image */
+.login-page.gradient-background {
+  background: linear-gradient(-45deg, #91a3f9, #d0c2ff, #8dd3f8);
+  background-size: 300% 300%;
+  animation: gradientMove 15s infinite linear;
+}
+.login-box {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
