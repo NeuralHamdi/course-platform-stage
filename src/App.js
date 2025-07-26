@@ -15,10 +15,7 @@ import AdminLoyout from './admin/AdminLayout.jsx';
 import DashboardStats from './admin/StatCard.jsx';
 
 // Import Page/Route Components
-import Herobanner from './components/Herobanner.jsx';
-import ModuleList from './components/ModuleList.jsx';
-import WhyChoose from './components/WhyChoose.jsx';
-import CallToAction from './components/CallToAction.jsx';
+import Home from './components/pages/Home.jsx';
 import FilterCourses from './components/Programs.jsx';
 import Cours from './components/ListerCours.jsx';
 import AboutSection from './components/Apropos.jsx';
@@ -30,7 +27,9 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Unauthorized from './components/pages/Unauthorized.jsx';
 import NotFound from './components/pages/NotFound.jsx';
 import { useAuth } from './context/AuthContext.jsx';
-import StudentTable from './admin/StudentTable.jsx'
+import StudentTable from './admin/StudentTable.jsx';
+import CoursesPage from './admin/CoursesPage.jsx';
+import ModulesPage from './admin/ModulesPage.jsx';
 
 /**
  * PublicLayout: Wraps all public pages to provide the Navbar and Footer.
@@ -75,15 +74,7 @@ function App() {
         {/* --- PUBLIC ROUTES --- */}
         {/* All routes nested here will have the public Navbar and Footer */}
         <Route path='/' element={<PublicLayout />}>
-          <Route index element={
-              <>
-                <Herobanner />
-                <ModuleList />
-                <WhyChoose />
-                <CallToAction />
-              </>
-            }
-          />
+          <Route index element={<Home/>}/>
           <Route path="Programs" element={<FilterCourses />} />
           <Route path="modules/:id" element={<Cours />} />
           <Route path="Apropos" element={<AboutSection />} />
@@ -104,6 +95,8 @@ function App() {
   <Route path="/admin" element={<AdminLoyout />}>
     <Route index element={<DashboardStats />} />
      <Route path="students" element={<StudentTable />} /> 
+     <Route path='courses' element={<CoursesPage/>}/>
+     <Route path='modules' element={<ModulesPage/>}/>
   
   </Route>
 </Route>

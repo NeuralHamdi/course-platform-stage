@@ -57,7 +57,7 @@ const RelatedCourses = ({ courseId }) => {
 
   return (
     <div className="related-courses-section my-5">
-      <h3 className="fw-bold mb-4">Related Programs</h3>
+      <h3 className="fw-bold mb-4"> </h3>
       <div className="row g-4">
         {relatedCourses.map(course => (
           // The structure of CourseCard is moved directly here

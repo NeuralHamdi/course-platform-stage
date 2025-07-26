@@ -101,7 +101,7 @@ export default function Footer() {
 
   return (
     <motion.footer
-      className="footer-section mt-3"
+      className="footer-section mt-0"
       variants={footerVariants}
       initial="hidden"
       whileInView="visible"

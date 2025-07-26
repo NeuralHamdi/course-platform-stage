@@ -1,152 +1,359 @@
-/* --- Root variables for easy theme customization --- */
+/* Enhanced ModuleList.css - Modern Training Center Design */
+
 :root {
-    --primary-color: #007bff;
-    --primary-color-dark: #0056b3;
-    --card-bg: #ffffff;
-    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.12);
-    --card-border-radius: 12px;
-    --text-dark: #212529;
-    --text-light: #6c757d;
-    --section-bg: #f8f9fa;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-border: rgba(255, 255, 255, 0.2);
+    --text-dark: #2d3748;
+    --text-light: #718096;
+    --section-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+    --border-radius: 20px;
 }
 
-/* --- Section Styling --- */
+/* Section Styling */
 .module-list__section {
-    background-color: var(--section-bg);
-    padding: 60px 0;
+    background: var(--section-bg);
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
 }
 
+.module-list__section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1.5" fill="rgba(102,126,234,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.4;
+}
+
+.module-list__section .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Title Styling */
 .module-list__title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
     color: var(--text-dark);
+    position: relative;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.module-list__title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
 }
 
 .module-list__subtitle {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 3.5rem !important; /* Overriding bootstrap margin */
+    margin: 0 auto 4rem auto;
     color: var(--text-light);
+    font-weight: 300;
+    line-height: 1.6;
 }
 
-/* --- Loader Styling --- */
+/* Enhanced Loader */
 .module-list__loader {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 300px;
+    height: 400px;
     color: var(--text-light);
     font-size: 1.2rem;
 }
 
 .module-list__spinner {
-    font-size: 3rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    color: #667eea;
+    margin-bottom: 1.5rem;
     animation: spin 1.5s linear infinite;
 }
 
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-
-/* --- THE NEW CARD DESIGN --- */
-
-/* This is the main card container */
+/* Modern Card Design */
 .module-list__card {
-    background-color: var(--card-bg);
-    border-radius: var(--card-border-radius);
-    box-shadow: var(--card-shadow);
-    overflow: hidden; /* Ensures image corners are rounded */
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #e9ecef;
-}
-
-.module-list__card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--card-shadow-hover);
-}
-
-/* Container for the image to control aspect ratio */
-.module-list__card-image-container {
-    width: 100%;
-    /* Creates a 16:9 aspect ratio for the image */
-    padding-top: 56.25%; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
+    backdrop-filter: blur(10px);
+    height: 100%;
 }
 
-.module-list__card-img {
+/* Dynamic top border for each card */
+.module-list__card::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+    z-index: 1;
+}
+
+/* Different gradients for cards based on nth-child */
+.row > div:nth-child(2) .module-list__card::before { background: var(--secondary-gradient); }
+.row > div:nth-child(3) .module-list__card::before { background: var(--accent-gradient); }
+.row > div:nth-child(4) .module-list__card::before { background: var(--dark-gradient); }
+.row > div:nth-child(5) .module-list__card::before { background: var(--success-gradient); }
+.row > div:nth-child(6) .module-list__card::before { background: var(--warning-gradient); }
+
+.module-list__card:hover::before {
+    transform: scaleX(1);
+}
+
+.module-list__card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: var(--shadow-heavy);
+}
+
+/* Image Container */
+.module-list__card-image-container {
+    width: 100%;
+    height: 240px;
+    position: relative;
+    overflow: hidden;
+}
+
+.module-list__card-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Prevents image stretching */
-    transition: transform 0.4s ease;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
 .module-list__card:hover .module-list__card-img {
-    transform: scale(1.05); /* Subtle zoom on hover */
+    transform: scale(1.1);
 }
 
+/* Image Overlay Effect */
+.module-list__card-image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-/* Styling for the card content area */
+.module-list__card:hover .module-list__card-image-container::after {
+    opacity: 1;
+}
+
+/* Card Content */
 .module-list__card-body {
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Makes the body take up remaining space */
+    flex-grow: 1;
+    position: relative;
 }
 
 .module-list__card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 0.75rem;
-    /* Prevent title from breaking card layout if too long */
-    min-height: 3rem; 
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
 }
 
 .module-list__card-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-light);
-    line-height: 1.6;
-    flex-grow: 1; /* Pushes the button to the bottom */
-    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    flex-grow: 1;
+    margin-bottom: 2rem;
 }
 
-
-/* The stylish new button */
+/* Enhanced Button Design */
 .module-list__card-button {
-    display: inline-block;
-    background-color: var(--primary-color);
-    color: #ffffff;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px; /* Pill-shaped button */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 50px;
     text-decoration: none;
-    font-weight: 500;
-    text-align: center;
-    margin-top: auto; /* Aligns to the bottom */
-    align-self: flex-start; /* Aligns to the left */
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: auto;
+    align-self: flex-start;
+    min-width: 140px;
+}
+
+/* Shimmer effect on button */
+.module-list__card-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.module-list__card-button:hover::before {
+    left: 100%;
 }
 
 .module-list__card-button:hover {
-    background-color: var(--primary-color-dark);
-    color: #ffffff;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    text-decoration: none;
+    color: white;
+}
+
+/* Different button colors for different cards */
+.row > div:nth-child(2) .module-list__card-button { 
+    background: var(--secondary-gradient); 
+}
+.row > div:nth-child(2) .module-list__card-button:hover { 
+    box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4); 
+}
+
+.row > div:nth-child(3) .module-list__card-button { 
+    background: var(--accent-gradient); 
+}
+.row > div:nth-child(3) .module-list__card-button:hover { 
+    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); 
+}
+
+.row > div:nth-child(4) .module-list__card-button { 
+    background: var(--dark-gradient); 
+}
+.row > div:nth-child(4) .module-list__card-button:hover { 
+    box-shadow: 0 10px 30px rgba(44, 62, 80, 0.4); 
+}
+
+.row > div:nth-child(5) .module-list__card-button { 
+    background: var(--success-gradient); 
+}
+.row > div:nth-child(5) .module-list__card-button:hover { 
+    box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4); 
+}
+
+.row > div:nth-child(6) .module-list__card-button { 
+    background: var(--warning-gradient); 
+    color: #8b4513;
+}
+.row > div:nth-child(6) .module-list__card-button:hover { 
+    box-shadow: 0 10px 30px rgba(255, 183, 77, 0.4); 
+    color: #8b4513;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .module-list__title {
+        font-size: 2.2rem;
+    }
+    
+    .module-list__subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+    }
+    
+    .module-list__card-body {
+        padding: 1.5rem;
+    }
+    
+    .module-list__card-image-container {
+        height: 200px;
+    }
+    
+    .module-list__card:hover {
+        transform: translateY(-8px) scale(1.01);
+    }
+}
+
+@media (max-width: 576px) {
+    .module-list__section {
+        padding: 60px 0;
+    }
+    
+    .module-list__title {
+        font-size: 1.8rem;
+    }
+    
+    .module-list__card-body {
+        padding: 1.2rem;
+    }
+    
+    .module-list__card-button {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Error Alert Enhancement */
+.alert-danger {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 8px 25px rgba(238, 90, 82, 0.3);
+}
+
+/* Animation Enhancement for Framer Motion */
+.col-md-6.col-lg-4 {
+    margin-bottom: 2rem;
+}
+
+/* Hover effect for the entire card container */
+.col-md-6.col-lg-4:hover {
+    z-index: 10;
 }

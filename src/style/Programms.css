@@ -1,99 +1,731 @@
-/* ========== General Body Style ========== */
-/* Apply this in your main index.css or App.css for a global effect,
-   or just keep it here if only this page should have this background. */
-body {
-  background-color: #f8f9fa; /* A very light gray background for a softer look */
+/* ========== Enhanced Professional Styles for FilterCourses (Scoped) ========== */
+
+/* Global Background - NOW SCOPED TO THE PROGRAMS PAGE */
+.programs-page {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #bcdcf7ff 100%);
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
-/* ========== Filter Container Styles ========== */
-.filter-container {
-  background-color: #ffffff;
-  /* The border was in my previous suggestion, but your image has a soft shadow which is better.
-     Bootstrap's "shadow-sm" class you already have is perfect for this. */
+/* Animated Background Elements */
+.programs-page .animated-background {
+  position: relative;
+  overflow: hidden;
 }
 
+.programs-page .animated-background::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent,
+      rgba(255, 255, 255, 0.1));
+  animation: shimmer 15s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
 
-/* ========== Modern Button Styles ========== */
-.btn-action {
-  transition: all 0.3s ease; /* Crucial for smooth hover effects on buttons */
+@keyframes shimmer {
+  0%,
+  100% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+
+  50% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Main Container Enhancements */
+.programs-page .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Page Header Styles */
+.programs-page .page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #1565c0;
+}
+
+.programs-page .page-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(45deg, #1565c0, #1976d2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.programs-page .page-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-bottom: 2rem;
+  color: #424242;
+}
+
+.programs-page .stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.programs-page .stat-item {
+  display: flex;
+  align-items: center;
+  color: #546e7a;
+  font-size: 0.95rem;
   font-weight: 500;
-  border-radius: 0.5rem; /* Slightly more rounded corners */
 }
 
-/* Specific style for the main "Apply" button */
-.btn-primary.btn-action {
-  /* A nice purple shadow to match your button color */
-  box-shadow: 0 4px 15px rgba(102, 16, 242, 0.2);
+.programs-page .stat-item i {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
 }
 
-.btn-primary.btn-action:hover {
-  transform: translateY(-3px); /* Lifts the button on hover */
-  box-shadow: 0 6px 20px rgba(102, 16, 242, 0.3); /* A more pronounced shadow on hover */
+/* Enhanced Filter Container */
+.programs-page .filter-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Style for the "Clear" button */
-.btn-outline-secondary.btn-action:hover {
-  transform: translateY(-3px); /* Lifts the button on hover */
+.programs-page .filter-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+  background-size: 200% 100%;
+  animation: gradient-flow 3s ease infinite;
 }
 
+@keyframes gradient-flow {
 
-/* ========== Card Enhancements ========== */
-/* The card itself has shadow-sm and border-0 from the JSX, which is perfect. */
-.card {
-    border-radius: 0.75rem !important; /* Smoother, more modern rounded corners */
-    overflow: hidden; /* Ensures the image respects the rounded corners */
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
-.card-img-top {
-    transition: transform 0.4s ease; /* Smooth zoom effect on the image */
+.programs-page .filter-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #1565c0;
 }
 
-/* This is a cool effect: Zoom the image inside the card on hover */
-.card:hover .card-img-top {
-    transform: scale(1.05);
+.programs-page .filter-header i {
+  color: #1976d2;
+  margin-right: 1rem;
+  font-size: 1.5rem;
 }
 
-.card-footer-btn {
-  transition: all 0.3s ease;
+.programs-page .filter-header h4 {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Enhanced Form Controls */
+.programs-page .form-control,
+.programs-page .form-select {
+  border: none !important;
+  border-radius: 15px !important;
+  padding: 0.875rem 1rem !important;
+  background-color: #f8f9fa !important;
+  font-size: 16px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+}
+
+.programs-page .form-control:focus,
+.programs-page .form-select:focus {
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+  transform: translateY(-2px);
+}
+
+.programs-page .search-input-wrapper {
+  position: relative;
+}
+
+.programs-page .search-input-wrapper i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #1976d2;
+  z-index: 3;
+}
+
+.programs-page .search-input-wrapper .form-control {
+  padding-left: 2.5rem !important;
+}
+
+/* Enhanced Button Styles */
+.programs-page .btn-action {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
+  border-radius: 25px;
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.card-footer-btn:hover {
-  background-color: #198754; /* Darker green on hover for better feedback */
+.programs-page .btn-primary.btn-action {
+  background: linear-gradient(45deg, #1976d2, #1565c0);
+  border: none;
   color: white;
-  transform: scale(1.02); /* Make the button slightly bigger on hover */
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.3);
 }
 
-/* ========== Loading Spinner Animation ========== */
-/* This is for the improved loading state */
-@keyframes fa-spin {
+.programs-page .btn-primary.btn-action:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(25, 118, 210, 0.4);
+  background: linear-gradient(45deg, #1565c0, #0d47a1);
+}
+
+.programs-page .btn-outline-secondary.btn-action {
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  background: transparent;
+}
+
+.programs-page .btn-outline-secondary.btn-action:hover {
+  transform: translateY(-3px);
+  background: #6c757d;
+  color: white;
+  box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+}
+
+/* Card Enhancements */
+.programs-page .card {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: none !important;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa) !important;
+  position: relative;
+}
+
+.programs-page .card:hover {
+  transform: translateY(-12px) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+.programs-page .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(25, 118, 210, 0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.programs-page .card:hover::before {
+  opacity: 1;
+}
+
+.programs-page .card-body {
+  position: relative;
+  z-index: 2;
+}
+
+/* Image Enhancements */
+.programs-page .card-img-top {
+  height: 220px !important;
+  object-fit: cover !important;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.programs-page .card:hover .card-img-top {
+  transform: scale(1.08) !important;
+}
+
+/* Image Overlay */
+.programs-page .image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom,
+      transparent 0%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.7) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.programs-page .card:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Badge Styles */
+.programs-page .level-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 3;
+}
+
+.programs-page .duration-badge {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 3;
+}
+
+/* Card Content */
+.programs-page .card-title {
+  color: #2c3e50 !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 1rem !important;
+}
+
+.programs-page .card-text {
+  color: #6c757d !important;
+  line-height: 1.6 !important;
+  font-size: 0.95rem !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.programs-page .course-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid #e9ecef;
+}
+
+.programs-page .course-level {
+  display: flex;
+  align-items: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.programs-page .course-level i {
+  color: #1976d2;
+  margin-right: 0.5rem;
+}
+
+.programs-page .course-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1976d2;
+}
+
+/* Enhanced Footer Button */
+.programs-page .card-footer-btn {
+  width: 100% !important;
+  padding: 1rem !important;
+  background: linear-gradient(45deg, #1976d2, #1565c0) !important;
+  border: none !important;
+  border-radius: 15px !important;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.programs-page .card-footer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.programs-page .card-footer-btn:hover::before {
+  left: 100%;
+}
+
+.programs-page .card-footer-btn:hover {
+  transform: scale(1.02) !important;
+  box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4) !important;
+  background: linear-gradient(45deg, #1565c0, #0d47a1) !important;
+}
+
+.programs-page .card-footer-btn:active {
+  transform: scale(0.98) !important;
+}
+
+/* Loading State Enhancements */
+.programs-page .loading-container {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.programs-page .loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.5rem;
+  border: 4px solid rgba(25, 118, 210, 0.3);
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
 
-.fa-spin {
-  animation: fa-spin 1.5s infinite linear;
+.programs-page .loading-text {
+  color: #1565c0;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
+/* No Results State */
+.programs-page .no-results {
+  text-align: center;
+  padding: 4rem 0;
+  color: #1565c0;
+}
 
+.programs-page .no-results-icon {
+  width: 120px;
+  height: 120px;
+  background: rgba(25, 118, 210, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  font-size: 3rem;
+  color: #1976d2;
+}
 
+.programs-page .no-results h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1565c0;
+}
 
-/* ========== Animated Background ================= */
-/* --- Optional: Animated Gradient Border on Card Hover --- */
-.gradient-border-card {
+.programs-page .no-results p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #424242;
+}
+
+.programs-page .reset-filters-btn {
+  background: rgba(25, 118, 210, 0.1) !important;
+  border: 2px solid rgba(25, 118, 210, 0.3) !important;
+  color: #1976d2 !important;
+  padding: 0.75rem 2rem !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.programs-page .reset-filters-btn:hover {
+  background: rgba(25, 118, 210, 0.2) !important;
+  border-color: rgba(25, 118, 210, 0.5) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Error State */
+.programs-page .error-alert {
+  background: rgba(220, 53, 69, 0.1) !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  border-radius: 15px !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+  .programs-page .page-title {
+    font-size: 2rem;
+  }
+
+  .programs-page .stats-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .programs-page .filter-container {
+    margin: 0 1rem 2rem;
+    padding: 1.5rem !important;
+  }
+
+  .programs-page .btn-action {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .programs-page .card {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .programs-page .container {
+    padding: 0 0.5rem;
+  }
+
+  .programs-page .page-title {
+    font-size: 1.75rem;
+  }
+
+  .programs-page .filter-container {
+    border-radius: 15px !important;
+    margin: 0 0.5rem 1.5rem;
+  }
+}
+
+/* Accessibility Enhancements */
+.programs-page .btn:focus,
+.programs-page .form-control:focus,
+.programs-page .form-select:focus {
+  outline: 3px solid rgba(25, 118, 210, 0.5) !important;
+  outline-offset: 2px !important;
+}
+
+/* Animation Classes */
+.programs-page .fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.programs-page .slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.programs-page .scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Gradient Border Animation for Cards */
+.programs-page .gradient-border-card {
   position: relative;
-  background-clip: padding-box; /* Important for border */
-  border: 2px solid transparent;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 20px;
+  padding: 2px;
 }
 
+.programs-page .gradient-border-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(45deg, #1976d2, #1565c0, #1976d2);
+  background-size: 300% 300%;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  animation: gradient-border 3s ease infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-
-.gradient-border-card:hover::before {
+.programs-page .gradient-border-card:hover::before {
   opacity: 1;
 }
 
+@keyframes gradient-border {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Search Icon Enhancement */
+.programs-page .search-icon {
+  color: #1976d2;
+  font-size: 1.1rem;
+}
+
+/* Course Stats Enhancement */
+.programs-page .course-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+.programs-page .stat-item-card {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.programs-page .stat-item-card i {
+  margin-right: 0.5rem;
+  color: #1976d2;
+}
+
+/* Hover Effects for Better UX */
+.programs-page .interactive-element {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.programs-page .interactive-element:hover {
+  transform: translateY(-2px);
+}
+
+/* Premium Look Enhancements */
+.programs-page .premium-shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.programs-page .glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Typography Enhancements */
+.programs-page .text-gradient {
+  background: linear-gradient(45deg, #1976d2, #1565c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Course Category Colors */
+.programs-page .category-tech {
+  background: linear-gradient(45deg, #1976d2, #1565c0);
+}
+
+.programs-page .category-business {
+  background: linear-gradient(45deg, #f093fb, #f5576c);
+}
+
+.programs-page .category-design {
+  background: linear-gradient(45deg, #4facfe, #00f2fe);
+}
+
+.programs-page .category-marketing {
+  background: linear-gradient(45deg, #43e97b, #38f9d7);
+}
+
+/* Print Styles */
+@media print {
+
+  .programs-page .animated-background::before,
+  .programs-page .card::before,
+  .programs-page .gradient-border-card::before {
+    display: none !important;
+  }
+
+  .programs-page .card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}

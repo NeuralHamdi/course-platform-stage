@@ -82,7 +82,7 @@ function ModuleList() {
                                             {module.description || "No description available for this module."}
                                         </p>
                                         <Link
-                                            to={`/modules/${module.id}`}
+                                            to='programs'
                                             className="module-list__card-button"
                                         >
                                             View Courses →

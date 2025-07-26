@@ -26,8 +26,8 @@ const Sidebar = () => {
     const navLinks = [
         { to: ".", icon: <BsGrid1X2Fill />, text: "Dashboard" },
         { to: "students", icon: <BsPeopleFill />, text: "Students" },
-        { to: "/courses", icon: <BsBookFill />, text: "Courses" },
-        { to: "/modules", icon: <BsStack />, text: "Modules" },
+        { to: "courses", icon: <BsBookFill />, text: "Courses" },
+        { to: "modules", icon: <BsStack />, text: "Modules" },
         { to: "/sessions", icon: <BsClockFill />, text: "Sessions" },
         { to: "/payments", icon: <BsCreditCardFill />, text: "Payments" },
         { to: "/inscriptions", icon: <BsFileTextFill />, text: "Inscriptions" },

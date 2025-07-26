@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Hero from '../assets/hero-image.jpg'; 
-import { FaClock, FaChartLine } from 'react-icons/fa';
+import { FaClock, FaChartLine, FaSearch, FaFilter, FaGraduationCap, FaStar, FaUsers, FaPlay } from 'react-icons/fa';
 import { Link } from "react-router-dom"; 
 import { motion } from "framer-motion";
 import '../style/Programms.css'
+
 export default function FilterCourses() {
   const [search, setSearch] = useState("");
   const [moduleId, setModuleId] = useState("");
   const [level, setLevel] = useState("");
   const [duration, setDuration] = useState("");
 
-  
   const fetchCourses = async () => {
     const response = await axios.get("http://mon-projet.test/api/courses", {
       params: {
@@ -25,179 +25,315 @@ export default function FilterCourses() {
     return response.data;
   };
 
-  // --- React Query : récupérer les cours filtrés ---
   const { data: courses, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['courses', search, moduleId, level,duration], 
+    queryKey: ['courses', search, moduleId, level, duration], 
     queryFn: fetchCourses,
- 
   });
-const fetchModules = async () => {
-  const response = await axios.get("http://mon-projet.test/api/modules/all");
-  return response.data;
-};
 
-const { data: modules=[], isLoading: modulesLoading, isError: modulesError } = useQuery({
-  queryKey: ['modules'],
-  queryFn: fetchModules,
-});
+  const fetchModules = async () => {
+    const response = await axios.get("http://mon-projet.test/api/modules/all");
+    return response.data;
+  };
 
-  // --- Clear Filters ---
+  const { data: modules = [], isLoading: modulesLoading, isError: modulesError } = useQuery({
+    queryKey: ['modules'],
+    queryFn: fetchModules,
+  });
+
   const clearFilters = () => {
     setSearch("");
     setModuleId("");
     setLevel("");
-    refetch(); // recharge sans filtre
+    setDuration("");
+    refetch();
+  };
+
+  const getLevelColor = (niveau) => {
+    switch(niveau) {
+      case 'Beginner': return 'success';
+      case 'Intermediate': return 'warning';
+      case 'Advanced': return 'danger';
+      default: return 'secondary';
+    }
+  };
+
+  const getDurationIcon = (dureeUnite) => {
+    switch(dureeUnite) {
+      case 'hours': return '⏰';
+      case 'days': return '📅';
+      case 'weeks': return '📆';
+      default: return '⏱️';
+    }
   };
 
   return (
-    <div className="container mt-5 animated-background">
-      <h2>Filter Courses</h2>
-
-      {/* --- Filtres --- */}
-   <motion.div
-  className="m-4 rounded-4 p-4 shadow-sm filter-container"
-  initial={{ opacity: 0, y: -50 }} // Start invisible and 50px above
-  animate={{ opacity: 1, y: 0 }}   // Animate to full visibility and original position
-  transition={{ duration: 0.5, ease: "easeOut" }}
->
-  
-  {/* LIGNE 1: Les champs de recherche */}
-  <div className="row g-3 mb-4">
-    {/* Filtre 1: Recherche par mot-clé */}
-    <div className="col-12 col-md-6 col-lg-3">
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Recherche..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-    </div>
-
-    {/* Filtre 2: Domaine */}
-    <div className="col-12 col-md-6 col-lg-3">
-      <select
-        className="form-select"
-        value={moduleId}
-        onChange={(e) => setModuleId(e.target.value)}
-      >
-        <option value="">Sélectionner Domaine</option>
-        
-      {Array.isArray(modules)&&modules.map((module) => (
-    <option key={module.id} value={module.id}>
-      {module.titre} {/* ou module.name, selon le nom dans ta BDD */}
-    </option>
-  ))}
-      </select>
-    </div>
-
-    {/* Filtre 3: Durée */}
-    <div className="col-12 col-md-6 col-lg-3">
-      <select className="form-select" value={duration} onChange={(e) => setDuration(e.target.value) }>
-        <option value="">Sélectionner Durée</option>
-        <option value="hours">Hours</option>
-        <option value="days">days</option>
-        <option value="weeks">weeks</option>
-      </select>
-    </div>
-
-    {/* Filtre 4: Niveau */}
-    <div className="col-12 col-md-6 col-lg-3">
-      <select
-        className="form-select"
-        value={level}
-        onChange={(e) => setLevel(e.target.value)}
-      >
-        <option value="">Sélectionner Niveau</option>
-        <option value="Beginner">Débutant</option>
-        <option value="Intermediate">Intermédiaire</option>
-        <option value="Advanced">Avancé</option>
-      </select>
-    </div>
-  </div>
-
-  {/* LIGNE 2: Les boutons d'action */}
-  <div className="row">
-    <div className="col-12 d-flex justify-content-end">
-      <button onClick={clearFilters} className="btn btn-outline-secondary me-2 btn-action">
-        ✖ Effacer
-      </button>
-      <button onClick={() => refetch()} className="btn btn-primary btn-action">
-        Appliquer les Filtres
-      </button>
-    </div>
-  </div>
-</motion.div>
-
-
-    
-        {isLoading && <p>Loading courses...</p>}
-        {isError && <p className="text-danger">Error: {error.message}</p>}
-
-        {/* --- Affichage des cours --- */}
-     <motion.div
-  className="row"
-  variants={{
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1, // This will make each child animate one after the other
-      },
-    },
-  }}
-  initial="hidden"
-  animate="show"
->
-          {courses?.map((course) => (
-               <motion.div
-      key={course.id}
-      className="col-md-4 col-lg-3 mb-4"
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        show: { opacity: 1, y: 0 },
-      }}
-      whileHover={{ scale: 1.05, y: -5 }} // Animate on hover: scale up and move up
-      transition={{ duration: 0.3 }}
-    >
-          <div className="card h-100 shadow-sm border-0 gradient-border-card">
-            <img className="card-img-top " src={Hero} alt="Card image"></img>
-           {/* --- Code à remplacer dans la section d'affichage des cours --- */}
-
-      <div className="card-body d-flex flex-column">
-
-        {/* Ligne pour le Titre et le Prix */}
-        <div className="d-flex align-items-center mb-2">
-          {/* Titre cliquable aligné à gauche */}
-          <a href={`/courses/${course.id}`} className="text-decoration-none text-dark flex-grow-1 pe-2">
-        <h5 className="card-title mb-0 text-start" style={{ marginBottom: 0 }}>{course.titr || "data cours"}</h5>
-          </a>
-        </div>
-
-        {/* La description avec une classe standard pour un rendu plus fiable */}
-        <p className="card-text text-body-secondary flex-grow-1" style={{ textAlign: "justify" }}>{course.description}</p>
-        
-        {/* Informations sur la durée */}
-        <div className="d-flex align-items-center mt-2">
-          <FaClock className="me-1" /> {course.duree} {course.duree_unite}
-        </div>
-        {/* Informations sur le niveau */}
-        <div className="d-flex align-items-center mt-2">
-          <FaChartLine className="me-1" /> {course.niveau}
-        </div>
-  <div className="mt-auto pt-3 ">
-    <Link to={`/courses/${course.id}`} className="btn btn-outline-success btn-close-white w-100 card-footer-btn">
-      Details →
-    </Link>
-  </div>
-
-</div>
+    <div className="min-vh-100 animated-background programs-page">
+      <div className="container py-5">
+        {/* Enhanced Header Section */}
+        <motion.div
+          className="page-header"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h1 className="page-title">
+            <FaGraduationCap className="me-3" />
+            Découvrez Nos Formations
+          </h1>
+          <p className="page-subtitle">
+            Explorez notre catalogue de formations professionnelles et trouvez le cours parfait pour votre carrière
+          </p>
+          <div className="stats-row">
+            <div className="stat-item">
+              <FaUsers className="me-2" />
+              <span>+1000 Étudiants</span>
             </div>
-          </motion.div>
-        ))}
-      </motion.div>
+            <div className="stat-item">
+              <FaStar className="me-2" />
+              <span>4.8/5 Étoiles</span>
+            </div>
+            <div className="stat-item">
+              <FaPlay className="me-2" />
+              <span>Formations Certifiantes</span>
+            </div>
+          </div>
+        </motion.div>
 
-      {courses?.length === 0 && !isLoading && <p>No courses found.</p>}
+        {/* Enhanced Filter Section */}
+        <motion.div
+          className="filter-container p-4 shadow-lg"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="filter-header">
+            <FaFilter />
+            <h4>Filtrer les Formations</h4>
+          </div>
+          
+          <div className="row g-4">
+            {/* Enhanced Search Input */}
+            <div className="col-md-6 col-lg-3">
+              <div className="search-input-wrapper">
+                <div className="search-icon" />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Rechercher une formation..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Enhanced Module Filter */}
+            <div className="col-md-6 col-lg-3">
+              <select
+                className="form-select"
+                value={moduleId}
+                onChange={(e) => setModuleId(e.target.value)}
+              >
+                <option value="">🎯 Tous les Domaines</option>
+                {Array.isArray(modules) && modules.map((module) => (
+                  <option key={module.id} value={module.id}>
+                    {module.titre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Enhanced Duration Filter */}
+            <div className="col-md-6 col-lg-3">
+              <select 
+                className="form-select"
+                value={duration} 
+                onChange={(e) => setDuration(e.target.value)}
+              >
+                <option value="">⏰ Toutes les Durées</option>
+                <option value="hours">Heures</option>
+                <option value="days">Jours</option>
+                <option value="weeks">Semaines</option>
+              </select>
+            </div>
+
+            {/* Enhanced Level Filter */}
+            <div className="col-md-6 col-lg-3">
+              <select
+                className="form-select"
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+              >
+                <option value="">📊 Tous les Niveaux</option>
+                <option value="Beginner">🌱 Débutant</option>
+                <option value="Intermediate">📈 Intermédiaire</option>
+                <option value="Advanced">🚀 Avancé</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Enhanced Action Buttons */}
+          <div className="d-flex justify-content-end gap-3 mt-4">
+            <motion.button 
+              onClick={clearFilters} 
+              className="btn btn-outline-secondary btn-action"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              ✖ Effacer
+            </motion.button>
+            <motion.button 
+              onClick={() => refetch()} 
+              className="btn btn-primary btn-action"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              🔍 Rechercher
+            </motion.button>
+          </div>
+        </motion.div>
+
+        {/* Enhanced Loading State */}
+        {isLoading && (
+          <motion.div 
+            className="loading-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <div className="loading-spinner"></div>
+            <p className="loading-text">Chargement des formations...</p>
+          </motion.div>
+        )}
+
+        {/* Enhanced Error State */}
+        {isError && (
+          <motion.div 
+            className="alert alert-danger error-alert mx-auto text-center"
+            style={{ maxWidth: '500px' }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <h5 className="alert-heading">Erreur de chargement</h5>
+            <p className="mb-0">{error.message}</p>
+          </motion.div>
+        )}
+
+        {/* Enhanced Courses Grid */}
+        <motion.div
+          className="row g-4"
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="show"
+        >
+          {courses?.map((course, index) => (
+            <motion.div
+              key={course.id}
+              className="col-lg-4 col-md-6"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                show: { opacity: 1, y: 0 },
+              }}
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
+            >
+              <div className="card h-100 gradient-border-card premium-shadow">
+                {/* Enhanced Course Image with Overlays */}
+                <div className="position-relative overflow-hidden">
+                  <img 
+                    className="card-img-top" 
+                    src={course.url_imag || Hero} 
+                    alt={course.titre}
+                  />
+                  <div className="image-overlay"></div>
+                  
+                  {/* Level Badge */}
+                  <span className={`badge bg-${getLevelColor(course.niveau)} level-badge`}>
+                    {course.niveau}
+                  </span>
+                  
+                  {/* Duration Badge */}
+                  <div className="duration-badge">
+                    <span className="me-2">{getDurationIcon(course.duree_unite)}</span>
+                    {course.duree} {course.duree_unite}
+                  </div>
+                </div>
+
+                {/* Enhanced Card Body */}
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title">
+                    {course.titre || "Formation disponible"}
+                  </h5>
+                  
+                  <p className="card-text flex-grow-1">
+                    {course.description}
+                  </p>
+
+                  {/* Enhanced Course Stats */}
+                  <div className="course-stats">
+                    <div className="stat-item-card">
+                      <FaChartLine />
+                      <span>{course.niveau}</span>
+                    </div>
+                    {course.prix_reference && (
+                      <div className="course-price">
+                        {course.prix_reference}€
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Enhanced Action Button */}
+                  <motion.div
+                    className="mt-auto"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Link 
+                      to={`/courses/${course.id}`} 
+                      className="card-footer-btn"
+                    >
+                      📚 Voir les Détails
+                    </Link>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Enhanced No Results State */}
+        {courses?.length === 0 && !isLoading && (
+          <motion.div 
+            className="no-results"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="no-results-icon">
+              <FaSearch />
+            </div>
+            <h3>Aucune formation trouvée</h3>
+            <p>
+              Essayez de modifier vos critères de recherche pour trouver d'autres formations.
+            </p>
+            <motion.button 
+              onClick={clearFilters}
+              className="btn reset-filters-btn"
+              whileHover={{ scale: 1.05 }}
+            >
+              Réinitialiser les filtres
+            </motion.button>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }

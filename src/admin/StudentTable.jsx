@@ -4,6 +4,12 @@ import axios from 'axios';
 import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
 import { Modal, Button, ListGroup, Form } from 'react-bootstrap';
 
+import AddEtudiantModal from './ADDEtudiantModal';
+import AddCourseToStudentModal from './AddcourseToStudent';
+
+
+
+
 // --- COMPOSANT MODAL POUR LES DÉTAILS (INCHANGÉ) ---
 const EtudiantDetailsModal = ({ show, handleClose, data, isLoading }) => {
   const etudiantData = data?.etudiant;
@@ -198,6 +204,8 @@ const StudentTable = () => {
   const [date, setDate] = useState('');
   const [page, setPage] = useState(1);
   const [prenom, setPrenom] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+
   
   // State pour le modal de détails
   const [selectedIdForDetails, setSelectedIdForDetails] = useState(null);
@@ -206,6 +214,10 @@ const StudentTable = () => {
   // NOUVEAU STATE: pour le modal de mise à jour
   const [etudiantToEdit, setEtudiantToEdit] = useState(null);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
+
+  const [showAddCourseModal, setShowAddCourseModal] = useState(false);
+const [selectedEtudiantId, setSelectedEtudiantId] = useState(null);
+
 
   const queryClient = useQueryClient();
 
@@ -286,38 +298,44 @@ const StudentTable = () => {
       <h2 className="mb-4">Liste des étudiants</h2>
 
         {/* Filters */}
-        <div className="row g-2 mb-3">
+        <div className="mb-3">
+          <div className="row gx-2 gy-2 align-items-end">
             {/* Nom */}
-            <div className="col-12 col-md-auto">
-                <div className="input-group">
+            <div className="col-12 col-sm-6 col-md-4">
+              <div className="input-group">
                 <input type="text" className="form-control" placeholder="nom" value={name} onChange={handleNameChange} />
                 {name && (<button className="btn btn-outline-secondary" onClick={clearName}>&times;</button>)}
-                </div>
+              </div>
             </div>
             {/* Prénom */}
-            <div className="col-12 col-md-auto">
-                <div className="input-group">
+            <div className="col-12 col-sm-6 col-md-4">
+              <div className="input-group">
                 <input type="text" className="form-control" placeholder="prénom" value={prenom} onChange={handlePrenomChange} />
                 {prenom && (<button className="btn btn-outline-secondary" onClick={clearPrenom}>&times;</button>)}
-                </div>
+              </div>
             </div>
             {/* Email */}
-            <div className="col-12 col-md-auto">
-                <div className="input-group">
+            <div className="col-12 col-sm-6 col-md-4">
+              <div className="input-group">
                 <input type="text" className="form-control" placeholder="Email" value={email} onChange={handleEmailChange} />
                 {email && (<button className="btn btn-outline-secondary" onClick={clearEmail}>&times;</button>)}
-                </div>
+              </div>
             </div>
             {/* Date */}
-            <div className="col-12 col-md-auto">
-                <div className="input-group">
+            <div className="col-12 col-sm-12 col-md-4">
+              <div className="input-group">
                 <input type="date" className="form-control" value={date} onChange={handleDateChange} />
                 {date && (<button className="btn btn-outline-secondary" onClick={clearDate}>&times;</button>)}
-                </div>
+              </div>
             </div>
+            {/* Button */}
+            <div className="col-12 col-md-4 d-grid">
+              <Button onClick={() => setShowAddModal(true)}>Ajouter un étudiant</Button>
+            </div>
+          </div>
+          <AddEtudiantModal show={showAddModal} handleClose={() => setShowAddModal(false)} />
         </div>
-
-      {/* Loading and error states */}
+        {/* Loading and error states */}
       {isFetching && <div className="text-muted mb-2">🔄 Recherche en cours...</div>}
       {isError && <div className="text-danger">Erreur lors du chargement.</div>}
       {isLoading && <div>Chargement initial...</div>}
@@ -371,6 +389,16 @@ const StudentTable = () => {
                         onClick={() => handleDelete(etudiant.id)}
                         disabled={deleteMutation.isLoading}
                       />
+                       <Button
+    variant="success"
+    size="sm"
+    onClick={() => {
+      setSelectedEtudiantId(etudiant.id);
+      setShowAddCourseModal(true);
+    }}
+  >
+    + Cours
+  </Button>
                     </td>
                   </tr>
                 ))}
@@ -423,6 +451,14 @@ const StudentTable = () => {
         onUpdate={handleUpdate}
         updateMutation={updateMutation} 
       />
+      <AddCourseToStudentModal
+  show={showAddCourseModal}
+  handleClose={() => setShowAddCourseModal(false)}
+  etudiantId={selectedEtudiantId}
+  refetchEtudiantDetails={() => queryClient.invalidateQueries(['etudiants'])}
+/>
+
+
     </div>
   );
 };
