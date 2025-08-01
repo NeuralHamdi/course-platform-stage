@@ -8,7 +8,7 @@ import Logo from '../assets/Logo.png';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Import the AuthContext
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link} from 'react-router-dom'; // Import Link for navigation
 
 const Navbar = () => {
 
@@ -84,7 +84,9 @@ const Navbar = () => {
        
         {user ? (
           <div className="d-flex align-items-center">
-            <span className="me-3">👤 {user.nom}</span>
+<Link to="/dashboard" className="me-3 text-decoration-none text-dark">
+        👤 {user.nom}
+    </Link>
             <button onClick={handleLogout} className="Logout-button">Logout</button>
           </div>
         ) : (

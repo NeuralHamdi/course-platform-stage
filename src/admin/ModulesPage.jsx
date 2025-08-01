@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import apiClient from './apiClient'; // Make sure this points to the correct API address
+import apiClient from '../Api/apiClient';
 import { Container, Table, Button, Modal, Spinner, Alert, Form } from 'react-bootstrap';
 import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 
@@ -9,13 +9,41 @@ function ModulesPage() {
     const [showModal, setShowModal] = useState(null);
     const [selectedModule, setSelectedModule] = useState(null);
 
-    // --- 1. Data Fetching ---
-    const { data: modules, isError, error, isLoading } = useQuery({
+    // --- 1. Data Fetching with Aggressive Caching ---
+    const { data: modules, isError, error, isLoading, isFetching, isSuccess } = useQuery({
         queryKey: ['modules'],
         queryFn: async () => {
-            const response = await apiClient.get('/modules');
-            return response.data.data;
+            try {
+                console.log('Fetching modules...');
+                const response = await apiClient.get('/modules');
+                console.log('API Response:', response.data);
+                
+                // Gestion plus flexible de la structure de données
+                let moduleData = [];
+                if (response.data) {
+                    if (Array.isArray(response.data)) {
+                        moduleData = response.data;
+                    } else if (Array.isArray(response.data.data)) {
+                        moduleData = response.data.data;
+                    } else if (Array.isArray(response.data.modules)) {
+                        moduleData = response.data.modules;
+                    }
+                }
+                
+                console.log('Processed modules:', moduleData);
+                return moduleData;
+            } catch (error) {
+                console.error('Error fetching modules:', error);
+                throw error;
+            }
         },
+        staleTime: 15 * 60 * 1000, // 15 minutes - données considérées comme fraîches
+        gcTime: 30 * 60 * 1000, // 30 minutes - temps en cache (anciennement cacheTime)
+        refetchOnWindowFocus: false, // Pas de refetch au focus
+        refetchOnMount: false, // Pas de refetch au montage si cache existe
+        refetchOnReconnect: false, // Pas de refetch à la reconnexion
+        retry: 3,
+        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     });
 
     // --- 2. Data Modification (Mutations) ---
@@ -66,7 +94,6 @@ function ModulesPage() {
         }
     };
 
-    // ✨ FIX: This function now correctly gathers all fields with the right names
     const handleAddOrEdit = (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -87,16 +114,57 @@ function ModulesPage() {
     const isMutating = addMutation.isPending || editMutation.isPending || deleteMutation.isPending;
 
     // --- Render Logic ---
-    if (isLoading) return <Container className="d-flex justify-content-center mt-5"><Spinner animation="border" /></Container>;
-    if (isError) return <Container className="mt-4"><Alert variant="danger">Error: {error.message}. Is your API server running and is the address in apiClient.js correct?</Alert></Container>;
+    if (isLoading) {
+        return (
+            <Container className="d-flex justify-content-center mt-5">
+                <div className="text-center">
+                    <Spinner animation="border" />
+                    <p className="mt-2">Loading modules...</p>
+                </div>
+            </Container>
+        );
+    }
+    
+    if (isError) {
+        return (
+            <Container className="mt-4">
+                <Alert variant="danger">
+                    <h5>Error loading modules</h5>
+                    <p>{error.message}</p>
+                    <p>Please check:</p>
+                    <ul>
+                        <li>Is your API server running?</li>
+                        <li>Is the API address in apiClient.js correct?</li>
+                        <li>Check browser console for more details</li>
+                    </ul>
+                    <Button variant="outline-danger" onClick={() => queryClient.invalidateQueries({ queryKey: ['modules'] })}>
+                        Retry
+                    </Button>
+                </Alert>
+            </Container>
+        );
+    }
 
     return (
         <Container fluid="lg" className="mt-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1 className="h2">Manage Modules</h1>
-                <Button variant="primary" onClick={() => handleShowModal('edit')}>
-                    <FaPlus className="me-2" /> Add New Module
-                </Button>
+                <h1 className="h2">
+                    Manage Modules 
+                    {isFetching && <Spinner size="sm" className="ms-2" />}
+                </h1>
+                <div>
+                    <Button 
+                        variant="outline-secondary" 
+                        className="me-2"
+                        onClick={() => queryClient.invalidateQueries({ queryKey: ['modules'] })}
+                        disabled={isFetching}
+                    >
+                        Refresh
+                    </Button>
+                    <Button variant="primary" onClick={() => handleShowModal('edit')}>
+                        <FaPlus className="me-2" /> Add New Module
+                    </Button>
+                </div>
             </div>
 
             <Table striped bordered hover responsive="sm" className="shadow-sm">
@@ -110,27 +178,77 @@ function ModulesPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {modules?.map(module => (
-                        <tr key={module.id}>
-                            <td>{module.id}</td>
-                            <td>
-                                {module.url_images ? (
-                                    <img src={module.url_images} alt={module.titre} style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: '4px' }} />
-                                ) : (
-                                    <em>No image</em>
-                                )}
-                            </td>
-                            <td>{module.titre}</td>
-                            <td>
-                                {module.description ? `${module.description.substring(0, 80)}${module.description.length > 80 ? '...' : ''}` : <em>No description</em>}
-                            </td>
-                            <td className="text-center">
-                                <Button variant="link" className="text-info me-2 p-0" onClick={() => handleShowModal('view', module)} title="View Details"><FaEye size={20} /></Button>
-                                <Button variant="link" className="text-warning me-2 p-0" onClick={() => handleShowModal('edit', module)} title="Edit Module"><FaEdit size={20} /></Button>
-                                <Button variant="link" className="text-danger p-0" onClick={() => handleShowModal('delete', module)} title="Delete Module"><FaTrash size={20} /></Button>
+                    {/* Debug info - à supprimer en production */}
+                    {process.env.NODE_ENV === 'development' && (
+                        <tr>
+                            <td colSpan="5" className="bg-light text-muted small">
+                                Debug: Found {modules?.length || 0} modules | Loading: {isLoading.toString()} | Fetching: {isFetching.toString()}
                             </td>
                         </tr>
-                    ))}
+                    )}
+                    
+                    {modules && modules.length > 0 ? (
+                        modules.map((module, index) => {
+                            // Debug pour voir la structure des données
+                            console.log(`Module ${index}:`, module);
+                            
+                            return (
+                                <tr key={module.id || index}>
+                                    <td>{module.id || 'N/A'}</td>
+                                    <td>
+                                        {module.url_images || module.image_url || module.image ? (
+                                            <img 
+                                                src={module.url_images || module.image_url || module.image} 
+                                                alt={module.titre || module.title || module.name || 'Module'} 
+                                                style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: '4px' }}
+                                                onError={(e) => {
+                                                    e.target.style.display = 'none';
+                                                    e.target.nextSibling.style.display = 'block';
+                                                }}
+                                            />
+                                        ) : null}
+                                        <em style={{ display: module.url_images || module.image_url || module.image ? 'none' : 'block' }}>
+                                            No image
+                                        </em>
+                                    </td>
+                                    <td>{module.titre || module.title || module.name || 'Unnamed'}</td>
+                                    <td>
+                                        {(module.description && module.description.trim()) ? (
+                                            module.description.length > 80 
+                                                ? `${module.description.substring(0, 80)}...`
+                                                : module.description
+                                        ) : (
+                                            <em>No description</em>
+                                        )}
+                                    </td>
+                                    <td className="text-center">
+                                        <Button variant="link" className="text-info me-2 p-0" onClick={() => handleShowModal('view', module)} title="View Details">
+                                            <FaEye size={20} />
+                                        </Button>
+                                        <Button variant="link" className="text-warning me-2 p-0" onClick={() => handleShowModal('edit', module)} title="Edit Module">
+                                            <FaEdit size={20} />
+                                        </Button>
+                                        <Button variant="link" className="text-danger p-0" onClick={() => handleShowModal('delete', module)} title="Delete Module">
+                                            <FaTrash size={20} />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan="5" className="text-center text-muted py-4">
+                                {isFetching ? (
+                                    <>
+                                        <Spinner size="sm" className="me-2" />
+                                        Loading modules...
+                                    </>
+                                ) : (
+                                    'No modules found'
+                                )}
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
 
@@ -172,7 +290,6 @@ function ModulesPage() {
                             <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={4} defaultValue={selectedModule?.description} required />
                         </Form.Group>
-                        {/* ✨ FIX: The controlId is now unique and correct */}
                         <Form.Group className="mb-3" controlId="url_images">
                             <Form.Label>Image URL</Form.Label>
                             <Form.Control type="text" defaultValue={selectedModule?.url_images} required />

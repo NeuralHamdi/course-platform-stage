@@ -20,7 +20,15 @@ export default function CourseDetails() {
       return response.data;
     }
   });
-
+function getMinPrice(course) {
+  const { sessions } = course;
+  if (!Array.isArray(sessions) || sessions.length === 0) {
+    return null;
+  }
+  // On transforme chaque prix en float et on cherche le min
+  const prices = sessions.map(s => parseFloat(s.prix));
+  return Math.min(...prices);
+}
   // --- Fonctions d'aide pour la logique d'affichage ---
 
   // Détermine le badge de statut pour une session
@@ -115,7 +123,7 @@ export default function CourseDetails() {
                                 <Col md={4}>
                                     <FaDollarSign size="2em" className="text-primary mb-2" />
                                     <h5 className="h6 text-muted">Reference Price</h5>
-                                    <p className="mb-0 fw-bold">${course.prix_reference}</p>
+                                    <p className="mb-0 fw-bold">${getMinPrice(course)}</p>
                                 </Col>
                             </Row>
                         </Card.Body>

@@ -28,9 +28,15 @@ import Unauthorized from './components/pages/Unauthorized.jsx';
 import NotFound from './components/pages/NotFound.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 import StudentTable from './admin/StudentTable.jsx';
-import CoursesPage from './admin/CoursesPage.jsx';
+import CoursePage from './admin/GestionCourse.jsx';
 import ModulesPage from './admin/ModulesPage.jsx';
+import GestionSession from './admin/GestionSession.jsx';
 
+import PaymentsPage from './admin/PayementPages.jsx';
+import PaymentSuccessPage from './components/pages/PaymentSuccessPage.jsx';
+import PaymentCancelPage from './components/pages/PaymentCancelPage.jsx';
+import InscriptionPage from './components/pages/InscriptionPage.jsx';
+import DashboardPage from './components/pages/DashboardPage.jsx';
 /**
  * PublicLayout: Wraps all public pages to provide the Navbar and Footer.
  */
@@ -62,7 +68,7 @@ const PublicLayout = () => {
 };
 
 /**
- * AdminLayout: Wraps all admin pages to provide the Sidebar layout.
+ * stripe listen --forward-to http://mon-projet.test/api/stripe/webhook
  */
 
 
@@ -82,12 +88,18 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="courses/:id" element={<CourseDetails />} />
-          <Route path="/unauthorized" element={<Unauthorized/>
-              
-            }
-          />
-        </Route>
+          <Route path="/unauthorized" element={<Unauthorized/>}/>
+          
 
+          <Route element={<ProtectedRoute />}>
+            <Route path="/inscription/:sessionId" element={<InscriptionPage />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage />} />
+            <Route path="/payment/cancel" element={<PaymentCancelPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
+        </Route>
+        {/* <Route element={<ProtectedRoute allowedRoles={['etudiants']} />}>
+        <Route path='/payement' */}
 
         {/* --- ADMIN PROTECTED ROUTES --- */}
         {/* Routes nested here are only for admins and will have the Sidebar layout */}
@@ -95,9 +107,10 @@ function App() {
   <Route path="/admin" element={<AdminLoyout />}>
     <Route index element={<DashboardStats />} />
      <Route path="students" element={<StudentTable />} /> 
-     <Route path='courses' element={<CoursesPage/>}/>
+     <Route path='courses' element={<CoursePage/>}/>
      <Route path='modules' element={<ModulesPage/>}/>
-  
+      <Route path='sessions' element={<GestionSession/>}/>
+      <Route path='payments' element={<PaymentsPage/>}/>
   </Route>
 </Route>
 

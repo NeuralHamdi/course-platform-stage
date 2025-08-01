@@ -29,25 +29,27 @@ const StatCard = ({ title, value, icon }) => {
 function RecentRegistrations({ data }) {
     return (
         <div className="card h-100">
-            <div className="card-header fw-bold">Recent Registrations</div>
+            <div className="card-header fw-bold">Student Activity Summary</div>
             <div className="table-responsive">
                 <table className="table table-hover mb-0">
                     <thead>
                         <tr>
-                            <th>Student Name</th>
-                            <th>Course</th>
-                            <th>Date</th>
-                            <th>Status</th>
+                            <th>Name</th>
+                            <th>prenom</th>
+                            <th>email</th>
+                            <th>course enrolled</th>
+                             <th>total paid</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.map((reg) => (
-                            <tr key={reg.id}>
-                                <td>{reg.etudiant.nom}</td>
-                                <td>{reg.session.cours.titre}</td>
-                                <td>{new Date(reg.date_inscription).toLocaleDateString()}</td>
-                                <td>{reg.statut}</td>
-                            </tr>
+                        {data?.map((reg,index) => (
+                            <tr key={index}>
+            <td>{reg.name}</td>
+            <td>{reg.prenom}</td>
+            <td>{reg.email}</td>
+            <td>{reg.courses_enrolled}</td>
+            <td>{reg.total_paid.toFixed(2)} DH</td>
+        </tr>
                         ))}
                     </tbody>
                 </table>
@@ -153,6 +155,11 @@ function DashboardStats() {
         return reponse.data;
     }
     const {data:LastInscription,isError:IserrorLastInscription,isLoading:isLoadingLastInscription}=useQuery({ queryKey:'LastInscription', queryFn:fetchLastInscription });
+    const StudentActive=async()=>{
+        const response = await axios.get('http://mon-projet.test/api/studentActive',{headers:{Authorization:`Bearer ${token}`}});
+        return response.data;
+    }
+    const {data:StudentActivity,isError:StudentActiveError,isLoading:isLoadingActiveStudent}=useQuery({queryKey:'StudentActivity',queryFn:StudentActive})
     
     const fetchCourses = async () => {
         const response = await axios.get("http://mon-projet.test/api/courses");
@@ -198,12 +205,12 @@ function DashboardStats() {
             {/* Rangée 2: Inscriptions Récentes & Tendances d'Inscription */}
             <div className="row">
                 <div className="col-lg-7 mb-4">
-                    {isLoadingLastInscription ? (
+                    {isLoadingActiveStudent ? (
                         <div className="card h-100 justify-content-center align-items-center"><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>
-                    ) : IserrorLastInscription ? (
-                        <div className="card h-100 justify-content-center align-items-center"><span className="text-danger">Error loading registrations.</span></div>
+                    ) : StudentActiveError ? (
+                        <div className="card h-100 justify-content-center align-items-center"><span className="text-danger">Error loading student.</span></div>
                     ) : (
-                        <RecentRegistrations data={LastInscription} />
+                        <RecentRegistrations data={StudentActivity} />
                     )}
                 </div>
                 <div className="col-lg-5 mb-4">

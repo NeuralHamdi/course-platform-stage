@@ -65,6 +65,35 @@ export default function FilterCourses() {
       default: return '⏱️';
     }
   };
+const getPriceDisplayInfo = (sessions) => {
+  // Scenario 1: No sessions scheduled yet
+  if (!Array.isArray(sessions) || sessions.length === 0) {
+    return { text: "Bientôt disponible", color: "secondary" };
+  }
+
+  const prices = sessions.map(s => parseFloat(s.prix));
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+
+  // Scenario 2: The course is free
+  if (maxPrice === 0) {
+    return { text: "Gratuit", color: "success" };
+  }
+
+  // Scenario 3: All sessions have the same price
+  if (minPrice === maxPrice) {
+    return { 
+      text: `${minPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`,
+      color: "primary" 
+    };
+  }
+
+  // Scenario 4: Prices vary, show the minimum price
+  return { 
+    text: `À partir de ${minPrice.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`,
+    color: "success"
+  };
+};
 
   return (
     <div className="min-vh-100 animated-background programs-page">
@@ -232,7 +261,9 @@ export default function FilterCourses() {
           initial="hidden"
           animate="show"
         >
-          {courses?.map((course, index) => (
+          {courses?.map((course, index) => {
+            const priceInfo=getPriceDisplayInfo(course.sessions);
+            return (
             <motion.div
               key={course.id}
               className="col-lg-4 col-md-6"
@@ -283,11 +314,9 @@ export default function FilterCourses() {
                       <FaChartLine />
                       <span>{course.niveau}</span>
                     </div>
-                    {course.prix_reference && (
-                      <div className="course-price">
-                        {course.prix_reference}€
-                      </div>
-                    )}
+                  <div className={`price-tag text-${priceInfo.color}`}>
+                            {priceInfo.text}
+                        </div>
                   </div>
 
                   {/* Enhanced Action Button */}
@@ -306,7 +335,8 @@ export default function FilterCourses() {
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+})}
         </motion.div>
 
         {/* Enhanced No Results State */}
