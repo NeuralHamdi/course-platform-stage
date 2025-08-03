@@ -2,6 +2,7 @@ import React from 'react';
 import { FaArrowRight, FaGraduationCap, FaUsers, FaCertificate, FaChartLine, FaLaptop, FaBookOpen } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { Link, Navigate } from 'react-router-dom';
+import apiClient from '../Api/apiClient';
 export default function HeroBanner() {
   const containerVariants = {
     hidden: { opacity: 0 },

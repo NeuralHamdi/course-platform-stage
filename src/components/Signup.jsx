@@ -4,6 +4,7 @@ import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
+import apiClient from "../Api/apiClient";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Signup = () => {
     const mutation = useMutation({
         mutationFn: async () => {
             // --- 2. Add new fields to the POST request ---
-            const response = await axios.post("http://mon-projet.test/api/register", {
+           const response = await apiClient.post("/register", {
                 nom,
                 prenom,
                 email,

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
+import apiClient from '../Api/apiClient';
 // Composant réutilisable pour chaque carte de statistiques
 // J'ai ajusté les classes pour une meilleure responsivité sur différentes tailles d'écran
 const StatCard = ({ title, value, icon }) => {
@@ -145,42 +145,42 @@ function DashboardStats() {
     // --- Hooks de data fetching (inchangés) ---
     const fetchEtudiant = async () => {
         if (!token) throw new Error("No authentication token found. Please log in.");
-        const response = await axios.get('http://mon-projet.test/api/etudiants', { headers: { Authorization: `Bearer ${token}` } });
+        const response = await apiClient.get('/etudiants');
         return response.data;
     };
     const { data: etudiants, isLoading, isError, error } = useQuery({ queryKey: ['etudiants', token], queryFn: fetchEtudiant, enabled: !!token });
 
     const fetchLastInscription=async()=>{
-        const reponse =await axios.get('http://mon-projet.test/api/recentPayement',{ headers:{ Authorization:`Bearer ${token}` } });
+        const reponse =await apiClient.get('/recentPayement');
         return reponse.data;
     }
     const {data:LastInscription,isError:IserrorLastInscription,isLoading:isLoadingLastInscription}=useQuery({ queryKey:'LastInscription', queryFn:fetchLastInscription });
     const StudentActive=async()=>{
-        const response = await axios.get('http://mon-projet.test/api/studentActive',{headers:{Authorization:`Bearer ${token}`}});
+        const response = await apiClient.get('/studentActive');
         return response.data;
     }
     const {data:StudentActivity,isError:StudentActiveError,isLoading:isLoadingActiveStudent}=useQuery({queryKey:'StudentActivity',queryFn:StudentActive})
     
     const fetchCourses = async () => {
-        const response = await axios.get("http://mon-projet.test/api/courses");
+        const response = await apiClient.get('/courses');
         return response.data;
     };
     const {data:courses,isError:isErrorCourse,isLoading:isLoadingCourse}=useQuery({ queryFn:fetchCourses, queryKey:'course' });
 
     const fetchRevenu=async ()=>{
-        const response= await axios.get('http://mon-projet.test/api/revenu',{ headers:{ Authorization: `Bearer ${token}` } });
+        const response= await apiClient.get('/revenu');
         return response.data;
     }
     const {data:revenu,error:errorRevenu,isError:isErrorRevenu,isLoading:isLoadingRevenu}=useQuery({ queryFn:fetchRevenu, queryKey:'revenu' });
     
     const fetchEnrollmentTrends = async () => {
-        const response = await axios.get('http://mon-projet.test/api/stats/enrollment-trends',{ headers:{ Authorization: `Bearer ${token}` } });
+        const response = await apiClient.get('/stats/enrollment-trends');
         return response.data || [];
     };
     const { data: trendsData = [], isLoading: isLoadingTrends, isError: isErrorTrends } = useQuery({ queryKey: ['trendsData'], queryFn: fetchEnrollmentTrends });
 
     const fetchRevenueGrowth = async () => {
-        const response = await axios.get('http://mon-projet.test/api/stats/revenue-growth',{ headers:{ Authorization:`Bearer ${token}` } });
+        const response = await apiClient.get('/stats/revenue-growth');
         return response.data || [];
     };
     const { data: revenueGrowthData = [], isLoading: isLoadingRevenueGrowth, isError: isErrorRevenueGrowth } = useQuery({ queryKey: ['revenueGrowthData'], queryFn: fetchRevenueGrowth });

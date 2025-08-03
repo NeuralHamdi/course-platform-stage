@@ -7,6 +7,7 @@ import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaPaperPlane, FaSpinner, FaChec
 // Import your page styles and authentication context
 import '../style/ContactPage.css';
 import { useAuth } from '../context/AuthContext'; // Import your auth hook
+import apiClient from '../Api/apiClient'; // Import your API client
 
 // --- Page Data ---
 const contactInfoCards = [
@@ -24,7 +25,7 @@ const faqData = [
 
 // API call function
 const sendContactMessage = (newMessage) => {
-    return axios.post('http://mon-projet.test/api/contact', newMessage);
+   return apiClient.post('/contact', newMessage);
 };
 
 

@@ -4,12 +4,13 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import heroImage from '../assets/hero-image.jpg'; // image par défaut si besoin
 import { Link } from "react-router-dom";
+import apiClient from "../Api/apiClient";
 export default function Cours() {
   const { id } = useParams();
 
   // Fonction fetch des cours du module
   const fetchCourses = async () => {
-    const response = await axios.get(`http://mon-projet.test/api/modules/${id}/courses`);
+    const response = await apiClient.get(`/modules/${id}/courses`);
     return response.data;
   };
 

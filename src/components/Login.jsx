@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Import the AuthContext
 import { Link } from "react-router-dom"; // Import Link for navigation
+import apiClient from "../Api/apiClient";
+
 const Login = () => {
   const { login } = useAuth(); // from context
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ const Login = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.post("http://mon-projet.test/api/login", {
+      const response = await apiClient.post("/login", {
         email,
         password,
       });

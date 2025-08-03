@@ -16,12 +16,12 @@ import { Link } from 'react-router-dom';
 
 import '../style/Footer.css';
 
-
+import apiClient from '../Api/apiClient';
 import { useAuth } from '../context/AuthContext'; 
 
 // API call function
 const subscribeToNewsletter = async (email) => {
-  const { data } = await axios.post('http://mon-projet.test/api/subscribe', { email });
+  const { data } = await apiClient.post('/subscribe', { email });
   return data;
 };
 

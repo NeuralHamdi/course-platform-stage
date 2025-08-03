@@ -5,6 +5,7 @@ import heroImage from '../assets/hero-image.jpg'; // Using a placeholder
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaSpinner } from "react-icons/fa";
+import apiClient from "../Api/apiClient"; // Importing the API client
 
 // Import the enhanced stylesheet
 import '../style/ModuleList.css'; 
@@ -14,7 +15,7 @@ function ModuleList() {
     const fetchAllModules = async () => {
         // The 500ms delay is kept to simulate a network request
         await new Promise(res => setTimeout(res, 500)); 
-        const response = await axios.get(`http://mon-projet.test/api/modules`);
+        const response = await apiClient.get('/modules');
         // Assuming the API returns an object like { data: [...] }
         return response.data; 
     };

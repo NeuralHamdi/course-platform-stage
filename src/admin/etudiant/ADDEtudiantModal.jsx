@@ -3,6 +3,7 @@ import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FaCheckCircle } from 'react-icons/fa';
+import apiClient from '../../Api/apiClient';
 
 const AddEtudiantModal = ({ show, handleClose }) => {
   const queryClient = useQueryClient();
@@ -21,11 +22,8 @@ const AddEtudiantModal = ({ show, handleClose }) => {
   // Mutation React Query
   const addMutation = useMutation({
     mutationFn: async () => {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('http://mon-projet.test/api/register', {
+      const response = await apiClient.post('/register', {
         nom, prenom, email, password, profession, niveau_Etudes
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
     },

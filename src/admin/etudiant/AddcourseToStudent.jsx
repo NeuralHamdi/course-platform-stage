@@ -2,28 +2,23 @@ import React, { useState } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import apiClient from '../../Api/apiClient';
 
 const fetchCourses = async () => {
 
-  const res = await axios.get('http://mon-projet.test/api/courses/all');
+  const res = await apiClient.get('/courses/all');
   console.log(res.data);
   return res.data || [];
 };
 
 const fetchSessions = async (courseId) => {
-  const token = localStorage.getItem('token');
-  const res = await axios.get(`http://mon-projet.test/api/courses/${courseId}/sessions`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await apiClient.get(`/courses/${courseId}/sessions`);
   return res.data.sessions || [];
 };
 
 const addInscription = async ({ etudiantId, sessionId }) => {
-  const token = localStorage.getItem('token');
-  const res = await axios.post(`http://mon-projet.test/api/etudiants/${etudiantId}/inscriptions`, {
+  const res = await apiClient.post(`/etudiants/${etudiantId}/inscriptions`, {
     session_id: sessionId,
-  }, {
-    headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
 };

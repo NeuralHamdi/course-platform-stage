@@ -9,12 +9,12 @@ import Hero from '../assets/hero-image.jpg'; // Default image
 
 // Make sure this path is correct for your CSS file
 import '../style/Programms.css'; // This CSS file contains the .card, .gradient-border-card, etc. styles
-
+import apiClient from '../Api/apiClient';
 const RelatedCourses = ({ courseId }) => {
   // Function to fetch related courses
   console.log("Fetching related courses for courseId:", courseId);
   const fetchRelatedCourses = async () => {
-    const response = await axios.get(`http://mon-projet.test/api/courses/${courseId}/related`);
+    const response = await apiClient.get(`/courses/${courseId}/related`);
     console.log("Related courses fetched:", response.data);
     return response.data;
   };

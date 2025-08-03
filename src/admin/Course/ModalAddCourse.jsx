@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import apiClient from '../../Api/apiClient';
 
 const ModalAddCourse = ({ show, handleClose }) => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const ModalAddCourse = ({ show, handleClose }) => {
   const { data: modules } = useQuery({
     queryKey: ['modules'],
     queryFn: async () => {
-      const res = await axios.get('http://mon-projet.test/api/modules/all')
+      const res = await apiClient.get('/modules/all')
        
       return res.data;
     }
@@ -33,9 +34,8 @@ const ModalAddCourse = ({ show, handleClose }) => {
   const mutation = useMutation({
 
     mutationFn: async (data) => {
-      const response = await axios.post('http://mon-projet.test/api/courses/add', data, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await apiClient.post('/courses/add', data
+     );
       return response.data;
     },
     onSuccess: () => {

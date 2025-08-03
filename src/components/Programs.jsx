@@ -5,7 +5,8 @@ import Hero from '../assets/hero-image.jpg';
 import { FaClock, FaChartLine, FaSearch, FaFilter, FaGraduationCap, FaStar, FaUsers, FaPlay } from 'react-icons/fa';
 import { Link } from "react-router-dom"; 
 import { motion } from "framer-motion";
-import '../style/Programms.css'
+import '../style/Programms.css';
+import apiClient from "../Api/apiClient"; // Importing the API client
 
 export default function FilterCourses() {
   const [search, setSearch] = useState("");
@@ -14,7 +15,7 @@ export default function FilterCourses() {
   const [duration, setDuration] = useState("");
 
   const fetchCourses = async () => {
-    const response = await axios.get("http://mon-projet.test/api/courses", {
+    const response = await apiClient.get("/courses", {
       params: {
         search: search,
         module_id: moduleId,
@@ -31,7 +32,7 @@ export default function FilterCourses() {
   });
 
   const fetchModules = async () => {
-    const response = await axios.get("http://mon-projet.test/api/modules/all");
+    const response = await apiClient.get("/modules/all");
     return response.data;
   };
 

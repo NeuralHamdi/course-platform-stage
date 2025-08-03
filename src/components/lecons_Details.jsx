@@ -8,7 +8,7 @@ import { Spinner, Accordion, Card, Container, Row, Col, Badge, Button } from "re
 import { FaClock, FaDollarSign, FaEnvelope, FaMapMarkerAlt, FaPhone, FaRegCheckCircle, FaChartBar, FaHistory } from 'react-icons/fa';
 import hero from '../assets/hero-image.jpg'; // Image de secours
 import RelatedCourses from "./RelatedCourses.jsx";
-
+import apiClient from "../Api/apiClient.js";
 export default function CourseDetails() {
   const { id } = useParams();
   
@@ -16,7 +16,7 @@ export default function CourseDetails() {
     queryKey: ['course', id],
     queryFn: async () => {
       // Remplacez l'URL par votre endpoint d'API réel
-      const response = await axios.get(`http://mon-projet.test/api/courses/${id}`);
+      const response = await apiClient.get(`/courses/${id}`);
       return response.data;
     }
   });

@@ -5,7 +5,7 @@ import { Button, Alert, Spinner } from 'react-bootstrap';
 
 // Import API functions
 import { fetchCourses, fetchCourseDetails, createCourse, updateCourse, deleteCourse } from '../Api/courseApi';
-
+import apiClient from '../Api/apiClient';
 // Import Components
 import CourseFilters from './Course/CourseFilter';
 import CourseTable from './Course/CourseTable';
@@ -72,15 +72,10 @@ const CoursePage = () => {
     const handleDownloadSessionRoster = async (sessionId, sessionTitle) => {
     // ... (This function will have the same axios logic as before) ...
     try {
-        const response = await axios({
-            // ✨ USE THE NEW ROUTE
-            url: `http://mon-projet.test/api/sessions/${sessionId}/roster`,
-            method: 'GET',
+        const response = await apiClient.get(`/sessions/${sessionId}/roster`, {
             responseType: 'blob',
             // ... (headers with auth token) ...
-            headers:{
-                'Authorization':`Bearer ${token}`
-            }
+        
         });
         
         // ... (The rest of the logic to create a link and trigger the download is the same) ...
