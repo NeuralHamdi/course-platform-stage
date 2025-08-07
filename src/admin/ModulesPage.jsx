@@ -2,15 +2,24 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../Api/apiClient';
 import { Container, Table, Button, Modal, Spinner, Alert, Form } from 'react-bootstrap';
-import { FaEye, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaPlus, FaSync } from 'react-icons/fa';
 
 function ModulesPage() {
     const queryClient = useQueryClient();
     const [showModal, setShowModal] = useState(null);
     const [selectedModule, setSelectedModule] = useState(null);
 
-    // --- 1. Data Fetching with Aggressive Caching ---
-    const { data: modules, isError, error, isLoading, isFetching, isSuccess } = useQuery({
+    // --- 1. Data Fetching with Improved Loading States ---
+    const { 
+        data: modules, 
+        isError, 
+        error, 
+        isLoading, 
+        isFetching, 
+        isSuccess,
+        isPending,
+        isRefetching
+    } = useQuery({
         queryKey: ['modules'],
         queryFn: async () => {
             try {
@@ -37,11 +46,11 @@ function ModulesPage() {
                 throw error;
             }
         },
-        staleTime: 15 * 60 * 1000, // 15 minutes - données considérées comme fraîches
-        gcTime: 30 * 60 * 1000, // 30 minutes - temps en cache (anciennement cacheTime)
-        refetchOnWindowFocus: false, // Pas de refetch au focus
-        refetchOnMount: false, // Pas de refetch au montage si cache existe
-        refetchOnReconnect: false, // Pas de refetch à la reconnexion
+        staleTime: 15 * 60 * 1000, // 15 minutes
+        gcTime: 30 * 60 * 1000, // 30 minutes
+        refetchOnWindowFocus: false,
+        refetchOnMount: true, // Changé pour permettre le rechargement
+        refetchOnReconnect: true, // Changé pour recharger à la reconnexion
         retry: 3,
         retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
     });
@@ -111,35 +120,67 @@ function ModulesPage() {
         }
     };
 
+    const handleRefresh = () => {
+        queryClient.invalidateQueries({ queryKey: ['modules'] });
+    };
+
     const isMutating = addMutation.isPending || editMutation.isPending || deleteMutation.isPending;
+    
+    // Condition améliorée pour le chargement : affiche le spinner pendant le chargement initial ET les rechargements
+    const isLoadingData = isLoading || (isFetching && !modules);
+    
+    // Condition pour afficher l'erreur : seulement si erreur ET pas en cours de chargement
+    const shouldShowError = isError && !isLoadingData;
 
     // --- Render Logic ---
-    if (isLoading) {
+    
+    // Afficher le spinner de chargement principal
+    if (isLoadingData) {
         return (
             <Container className="d-flex justify-content-center mt-5">
                 <div className="text-center">
-                    <Spinner animation="border" />
-                    <p className="mt-2">Loading modules...</p>
+                    <Spinner animation="border" variant="primary" />
+                    <p className="mt-2">
+                        {isLoading ? 'Loading modules...' : 'Refreshing modules...'}
+                    </p>
                 </div>
             </Container>
         );
     }
     
-    if (isError) {
+    // Afficher l'erreur seulement si pas en cours de chargement
+    if (shouldShowError) {
         return (
             <Container className="mt-4">
                 <Alert variant="danger">
-                    <h5>Error loading modules</h5>
-                    <p>{error.message}</p>
+                    <Alert.Heading>Error loading modules</Alert.Heading>
+                    <p>{error?.message || 'An unexpected error occurred'}</p>
                     <p>Please check:</p>
                     <ul>
                         <li>Is your API server running?</li>
                         <li>Is the API address in apiClient.js correct?</li>
                         <li>Check browser console for more details</li>
                     </ul>
-                    <Button variant="outline-danger" onClick={() => queryClient.invalidateQueries({ queryKey: ['modules'] })}>
-                        Retry
-                    </Button>
+                    <hr />
+                    <div className="d-flex gap-2">
+                        <Button 
+                            variant="outline-danger" 
+                            onClick={handleRefresh}
+                            disabled={isFetching}
+                        >
+                            {isFetching ? (
+                                <>
+                                    <Spinner as="span" size="sm" className="me-2" />
+                                    Retrying...
+                                </>
+                            ) : (
+                                <>
+                                    <FaSync className="me-2" />
+                                    Retry
+                                </>
+                            )}
+                        </Button>
+                    </div>
                 </Alert>
             </Container>
         );
@@ -150,22 +191,42 @@ function ModulesPage() {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="h2">
                     Manage Modules 
-                    {isFetching && <Spinner size="sm" className="ms-2" />}
+                    {(isFetching && modules) && (
+                        <Spinner size="sm" className="ms-2" animation="border" />
+                    )}
                 </h1>
                 <div>
                     <Button 
                         variant="outline-secondary" 
                         className="me-2"
-                        onClick={() => queryClient.invalidateQueries({ queryKey: ['modules'] })}
+                        onClick={handleRefresh}
                         disabled={isFetching}
                     >
-                        Refresh
+                        {isFetching ? (
+                            <>
+                                <Spinner as="span" size="sm" className="me-2" />
+                                Refreshing...
+                            </>
+                        ) : (
+                            <>
+                                <FaSync className="me-2" />
+                                Refresh
+                            </>
+                        )}
                     </Button>
                     <Button variant="primary" onClick={() => handleShowModal('edit')}>
                         <FaPlus className="me-2" /> Add New Module
                     </Button>
                 </div>
             </div>
+
+            {/* Indicateur de rechargement en arrière-plan */}
+            {isFetching && modules && (
+                <Alert variant="info" className="d-flex align-items-center mb-3">
+                    <Spinner size="sm" className="me-2" />
+                    <span>Updating modules data...</span>
+                </Alert>
+            )}
 
             <Table striped bordered hover responsive="sm" className="shadow-sm">
                 <thead className="bg-light">
@@ -182,7 +243,10 @@ function ModulesPage() {
                     {process.env.NODE_ENV === 'development' && (
                         <tr>
                             <td colSpan="5" className="bg-light text-muted small">
-                                Debug: Found {modules?.length || 0} modules | Loading: {isLoading.toString()} | Fetching: {isFetching.toString()}
+                                Debug: Found {modules?.length || 0} modules | 
+                                Loading: {isLoading.toString()} | 
+                                Fetching: {isFetching.toString()} |
+                                Error: {isError.toString()}
                             </td>
                         </tr>
                     )}
@@ -238,14 +302,7 @@ function ModulesPage() {
                     ) : (
                         <tr>
                             <td colSpan="5" className="text-center text-muted py-4">
-                                {isFetching ? (
-                                    <>
-                                        <Spinner size="sm" className="me-2" />
-                                        Loading modules...
-                                    </>
-                                ) : (
-                                    'No modules found'
-                                )}
+                                No modules found
                             </td>
                         </tr>
                     )}

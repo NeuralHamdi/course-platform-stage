@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Alert, Spinner } from 'react-bootstrap';
 import { FaMoneyBillWave } from 'react-icons/fa';
+import { useMemo } from 'react';
 
 // API Functions
-import { fetchPayments, fetchPaymentStats, refundPayment } from '../Api/paymentApi';
+import { fetchPayments, fetchPaymentStats } from '../Api/paymentApi';
 
 // Components
 import PaymentDashboard from './payment/PaymentDashbord';
 import PaymentFilters from './payment/PaymntFilters';
 import PaymentTable from './payment/PaymentTable';
 import CoursePagination from './Course/CoursePagination'; // Re-using pagination
-import RefundModal from './payment/RefundModal';
+
 import PaymentDetailsModal from './payment/PaymentDetailsModal';
 
 const PaymentsPage = () => {
@@ -29,8 +30,9 @@ const PaymentsPage = () => {
 
     // Query for dashboard statistics
     const { data: statsData, isLoading: isLoadingStats } = useQuery({
-        queryKey: ['paymentStats'],
+        queryKey: ['paymentStats',filters],
         queryFn: fetchPaymentStats,
+        keepPreviousData: true,
     });
 
     // Query for the list of payments
@@ -41,18 +43,17 @@ const PaymentsPage = () => {
     });
 
     // Mutation for processing refunds
-    const refundMutation = useMutation({
-        mutationFn: refundPayment,
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ['payments'] });
-            queryClient.invalidateQueries({ queryKey: ['paymentStats'] });
-            alert(data.message || 'Remboursement effectué avec succès!');
-            setRefundTarget(null); // Close modal
-        },
-        onError: (error) => {
-            alert(`Échec du remboursement: ${error.message}`);
-        }
-    });
+    
+//      const stats = useMemo(() => {
+//     const rows = paymentsData || [];
+//     const totalTransactions = rows.length;
+//     const totalRevenue = rows
+//       .reduce((sum, row) => sum + parseFloat(row.montant), 0);
+//     const averageSale = totalTransactions > 0
+//       ? totalRevenue / totalTransactions
+//       : 0;
+//     return { totalRevenue, totalTransactions, averageSale };
+//   }, [paymentsData.data]);
 
     const handlePageChange = (newPage) => {
         setFilters(prev => ({ ...prev, page: newPage }));
@@ -77,13 +78,7 @@ const PaymentsPage = () => {
             
             <CoursePagination data={paymentsData} onPageChange={handlePageChange} />
 
-            <RefundModal
-                show={!!refundTarget}
-                handleClose={() => setRefundTarget(null)}
-                payment={refundTarget}
-                onConfirmRefund={(refundData) => refundMutation.mutate(refundData)}
-                isRefunding={refundMutation.isLoading}
-            />
+         
             {/* The new Details Modal */}
             <PaymentDetailsModal
                 show={!!detailsTarget}

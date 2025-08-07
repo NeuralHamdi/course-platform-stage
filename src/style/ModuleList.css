@@ -1,6 +1,13 @@
-/* Enhanced ModuleList.css - Modern Training Center Design */
+/* Enhanced ModuleList.css - SCOPED WITHOUT REQUIRING JSX CHANGES */
 
-:root {
+/* KEY CHANGES:
+  1. Instead of :root, variables are defined on your top-level ".module-list__section" class.
+  2. All other styles are prefixed with ".module-list__section" to ensure they only apply within that section.
+  3. The animation name is changed to be unique, preventing global conflicts.
+*/
+
+.module-list__section {
+    /* Variables are now scoped to this specific section */
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -16,10 +23,8 @@
     --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.08);
     --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
     --border-radius: 20px;
-}
 
-/* Section Styling */
-.module-list__section {
+    /* Base section styling */
     background: var(--section-bg);
     padding: 80px 0;
     position: relative;
@@ -43,7 +48,7 @@
 }
 
 /* Title Styling */
-.module-list__title {
+.module-list__section .module-list__title {
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
@@ -55,7 +60,7 @@
     background-clip: text;
 }
 
-.module-list__title::after {
+.module-list__section .module-list__title::after {
     content: '';
     position: absolute;
     bottom: -15px;
@@ -67,7 +72,7 @@
     border-radius: 2px;
 }
 
-.module-list__subtitle {
+.module-list__section .module-list__subtitle {
     font-size: 1.3rem;
     max-width: 700px;
     margin: 0 auto 4rem auto;
@@ -77,7 +82,7 @@
 }
 
 /* Enhanced Loader */
-.module-list__loader {
+.module-list__section .module-list__loader {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -87,20 +92,21 @@
     font-size: 1.2rem;
 }
 
-.module-list__spinner {
+.module-list__section .module-list__spinner {
     font-size: 3.5rem;
     color: #667eea;
     margin-bottom: 1.5rem;
-    animation: spin 1.5s linear infinite;
+    animation: module-list-spin 1.5s linear infinite; /* Using renamed animation */
 }
 
-@keyframes spin {
+/* Renamed animation to be unique and avoid global conflicts */
+@keyframes module-list-spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
 
 /* Modern Card Design */
-.module-list__card {
+.module-list__section .module-list__card {
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
@@ -109,14 +115,13 @@
     flex-direction: column;
     width: 100%;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--card-border);
     position: relative;
     backdrop-filter: blur(10px);
     height: 100%;
 }
 
-/* Dynamic top border for each card */
-.module-list__card::before {
+.module-list__section .module-list__card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -129,43 +134,42 @@
     z-index: 1;
 }
 
-/* Different gradients for cards based on nth-child */
-.row > div:nth-child(2) .module-list__card::before { background: var(--secondary-gradient); }
-.row > div:nth-child(3) .module-list__card::before { background: var(--accent-gradient); }
-.row > div:nth-child(4) .module-list__card::before { background: var(--dark-gradient); }
-.row > div:nth-child(5) .module-list__card::before { background: var(--success-gradient); }
-.row > div:nth-child(6) .module-list__card::before { background: var(--warning-gradient); }
+/* Scoped generic selectors like .row to prevent conflicts */
+.module-list__section .row > div:nth-child(2) .module-list__card::before { background: var(--secondary-gradient); }
+.module-list__section .row > div:nth-child(3) .module-list__card::before { background: var(--accent-gradient); }
+.module-list__section .row > div:nth-child(4) .module-list__card::before { background: var(--dark-gradient); }
+.module-list__section .row > div:nth-child(5) .module-list__card::before { background: var(--success-gradient); }
+.module-list__section .row > div:nth-child(6) .module-list__card::before { background: var(--warning-gradient); }
 
-.module-list__card:hover::before {
+.module-list__section .module-list__card:hover::before {
     transform: scaleX(1);
 }
 
-.module-list__card:hover {
+.module-list__section .module-list__card:hover {
     transform: translateY(-15px) scale(1.02);
     box-shadow: var(--shadow-heavy);
 }
 
 /* Image Container */
-.module-list__card-image-container {
+.module-list__section .module-list__card-image-container {
     width: 100%;
     height: 240px;
     position: relative;
     overflow: hidden;
 }
 
-.module-list__card-img {
+.module-list__section .module-list__card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
 
-.module-list__card:hover .module-list__card-img {
+.module-list__section .module-list__card:hover .module-list__card-img {
     transform: scale(1.1);
 }
 
-/* Image Overlay Effect */
-.module-list__card-image-container::after {
+.module-list__section .module-list__card-image-container::after {
     content: '';
     position: absolute;
     top: 0;
@@ -180,12 +184,12 @@
     justify-content: center;
 }
 
-.module-list__card:hover .module-list__card-image-container::after {
+.module-list__section .module-list__card:hover .module-list__card-image-container::after {
     opacity: 1;
 }
 
 /* Card Content */
-.module-list__card-body {
+.module-list__section .module-list__card-body {
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -193,7 +197,7 @@
     position: relative;
 }
 
-.module-list__card-title {
+.module-list__section .module-list__card-title {
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-dark);
@@ -204,16 +208,16 @@
     align-items: center;
 }
 
-.module-list__card-text {
+.module-list__section .module-list__card-text {
     font-size: 1rem;
-    color: var(--text-light);
+    color: --var(--text-light);
     line-height: 1.7;
     flex-grow: 1;
     margin-bottom: 2rem;
 }
 
 /* Enhanced Button Design */
-.module-list__card-button {
+.module-list__section .module-list__card-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -233,8 +237,7 @@
     min-width: 140px;
 }
 
-/* Shimmer effect on button */
-.module-list__card-button::before {
+.module-list__section .module-list__card-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -245,75 +248,53 @@
     transition: left 0.5s ease;
 }
 
-.module-list__card-button:hover::before {
+.module-list__section .module-list__card-button:hover::before {
     left: 100%;
 }
 
-.module-list__card-button:hover {
+.module-list__section .module-list__card-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
     text-decoration: none;
     color: white;
 }
 
-/* Different button colors for different cards */
-.row > div:nth-child(2) .module-list__card-button { 
-    background: var(--secondary-gradient); 
-}
-.row > div:nth-child(2) .module-list__card-button:hover { 
-    box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4); 
-}
+/* Scoped button styles */
+.module-list__section .row > div:nth-child(2) .module-list__card-button { background: var(--secondary-gradient); }
+.module-list__section .row > div:nth-child(2) .module-list__card-button:hover { box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4); }
 
-.row > div:nth-child(3) .module-list__card-button { 
-    background: var(--accent-gradient); 
-}
-.row > div:nth-child(3) .module-list__card-button:hover { 
-    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); 
-}
+.module-list__section .row > div:nth-child(3) .module-list__card-button { background: var(--accent-gradient); }
+.module-list__section .row > div:nth-child(3) .module-list__card-button:hover { box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); }
 
-.row > div:nth-child(4) .module-list__card-button { 
-    background: var(--dark-gradient); 
-}
-.row > div:nth-child(4) .module-list__card-button:hover { 
-    box-shadow: 0 10px 30px rgba(44, 62, 80, 0.4); 
-}
+.module-list__section .row > div:nth-child(4) .module-list__card-button { background: var(--dark-gradient); }
+.module-list__section .row > div:nth-child(4) .module-list__card-button:hover { box-shadow: 0 10px 30px rgba(44, 62, 80, 0.4); }
 
-.row > div:nth-child(5) .module-list__card-button { 
-    background: var(--success-gradient); 
-}
-.row > div:nth-child(5) .module-list__card-button:hover { 
-    box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4); 
-}
+.module-list__section .row > div:nth-child(5) .module-list__card-button { background: var(--success-gradient); }
+.module-list__section .row > div:nth-child(5) .module-list__card-button:hover { box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4); }
 
-.row > div:nth-child(6) .module-list__card-button { 
-    background: var(--warning-gradient); 
-    color: #8b4513;
-}
-.row > div:nth-child(6) .module-list__card-button:hover { 
-    box-shadow: 0 10px 30px rgba(255, 183, 77, 0.4); 
-    color: #8b4513;
-}
+.module-list__section .row > div:nth-child(6) .module-list__card-button { background: var(--warning-gradient); color: #8b4513; }
+.module-list__section .row > div:nth-child(6) .module-list__card-button:hover { box-shadow: 0 10px 30px rgba(255, 183, 77, 0.4); color: #8b4513; }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .module-list__title {
+    .module-list__section .module-list__title {
         font-size: 2.2rem;
     }
     
-    .module-list__subtitle {
+    .module-list__section .module-list__subtitle {
         font-size: 1.1rem;
         margin-bottom: 3rem;
     }
     
-    .module-list__card-body {
+    .module-list__section .module-list__card-body {
         padding: 1.5rem;
     }
     
-    .module-list__card-image-container {
+    .module-list__section .module-list__card-image-container {
         height: 200px;
     }
     
-    .module-list__card:hover {
+    .module-list__section .module-list__card:hover {
         transform: translateY(-8px) scale(1.01);
     }
 }
@@ -323,22 +304,22 @@
         padding: 60px 0;
     }
     
-    .module-list__title {
+    .module-list__section .module-list__title {
         font-size: 1.8rem;
     }
     
-    .module-list__card-body {
+    .module-list__section .module-list__card-body {
         padding: 1.2rem;
     }
     
-    .module-list__card-button {
+    .module-list__section .module-list__card-button {
         padding: 12px 24px;
         font-size: 0.9rem;
     }
 }
 
-/* Error Alert Enhancement */
-.alert-danger {
+/* This alert style will now ONLY apply to alerts inside your section */
+.module-list__section .alert-danger {
     background: linear-gradient(135deg, #ff6b6b, #ee5a52);
     color: white;
     border: none;
@@ -348,12 +329,11 @@
     box-shadow: 0 8px 25px rgba(238, 90, 82, 0.3);
 }
 
-/* Animation Enhancement for Framer Motion */
-.col-md-6.col-lg-4 {
+/* Scoped grid column styles */
+.module-list__section .col-md-6.col-lg-4 {
     margin-bottom: 2rem;
 }
 
-/* Hover effect for the entire card container */
-.col-md-6.col-lg-4:hover {
+.module-list__section .col-md-6.col-lg-4:hover {
     z-index: 10;
 }

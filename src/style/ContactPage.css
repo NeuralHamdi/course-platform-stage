@@ -1,98 +1,343 @@
-/* src/style/ContactPage.css */
+/* --- src/style/ContactPage.css --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
+/* By defining variables here, they are SCOPED to this component only */
 .contact-page-wrapper {
-  padding-top: 4rem;
+  --primary-color: #0d6efd; /* A modern, friendly blue */
+  --primary-darker: #0b5ed7;
+  --dark-bg: #111827; /* Deep, professional dark for the hero */
+  --light-gray-bg: #f8f9fa;
+  --border-color: #dee2e6;
+  --success-color: #198754;
+  --danger-color: #dc3545;
+
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--light-gray-bg);
+  padding-top: 0; /* The hero section will be full width */
 }
 
 /* ========== 1. Hero Section Styling ========== */
 .contact-hero {
-  padding: 6rem 0;
+  padding: 7rem 0;
   color: white;
-  background: linear-gradient(135deg, #1c3d5a, #3c6e71);
+  background-color: var(--dark-bg);
+  /* Subtle geometric pattern for a techy feel */
+  background-image: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)), url('https://www.transparenttextures.com/patterns/cubes.png');
   text-align: center;
-  position: relative;
-  overflow: hidden;
 }
-.contact-hero::before, .contact-hero::after {
-  content: ''; position: absolute; border-radius: 50%; z-index: 1;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+
+.hero-title {
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 4rem); /* Responsive title */
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
-.contact-hero::before { width: 400px; height: 400px; top: -100px; left: -100px; }
-.contact-hero::after { width: 300px; height: 300px; bottom: -100px; right: -100px; }
 
-.hero-title { font-weight: 800; font-size: 3.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-.hero-subtitle { font-size: 1.25rem; color: rgba(255, 255, 255, 0.85); max-width: 600px; margin: 0 auto 3rem auto; }
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: #e5e7eb;
+  max-width: 650px;
+  margin: 1rem auto 3rem auto;
+  line-height: 1.7;
+}
 
-.info-card { display: flex; align-items: center; justify-content: center; gap: 0.75rem; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 0.75rem; transition: background-color 0.3s ease; }
-.info-card:hover { background: rgba(255,255,255,0.2); }
-.info-icon { font-size: 1.5rem; }
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #1f2937; /* A lighter shade of the dark BG */
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #374151;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+.info-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.info-icon { font-size: 1.5rem; color: var(--primary-color); }
 .info-text { font-size: 1rem; font-weight: 500; }
 
 /* ========== 2. Form & Map Section Styling ========== */
 .contact-main-section {
-  padding: 5rem 0;
-  background-color: #f8f9fa;
+  padding: 6rem 0;
+  background-color: #ffffff;
 }
 
 .form-card, .map-card {
   height: 100%;
   padding: 2.5rem;
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
 }
-.form-title { font-weight: 700; color: #343a40; margin-bottom: 2rem; }
-.form-control { padding: 1rem; border-radius: 0.5rem; border: 1px solid #dee2e6; }
-.form-control:focus { box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15); border-color: #86b7fe; }
-.map-card { padding: 1rem; }
-.map-card iframe { border-radius: 0.75rem; }
+.form-title {
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.form-control {
+  font-family: 'Poppins', sans-serif;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: #f8f9fa;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-control:focus {
+  background-color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+  outline: none;
+}
+.map-card { padding: 0; overflow: hidden; /* Hide anything outside the rounded corners */ }
 
 .submit-btn {
   width: 100%;
-  padding: 1rem;
+  padding: 0.8rem 1rem;
   font-size: 1.1rem;
   font-weight: 600;
-  border-radius: 50px;
+  border-radius: 8px;
   color: white;
   border: none;
-  background: linear-gradient(90deg, #007bff, #6f42c1);
-  box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
-  transition: all 0.3s ease;
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
   display: flex; align-items: center; justify-content: center;
 }
-.submit-btn:hover { box-shadow: 0 8px 25px rgba(111, 66, 193, 0.4); }
+.submit-btn:hover:not(:disabled) {
+    background-color: var(--primary-darker);
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.3);
+}
+.submit-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Spinner inside button */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Form feedback messages */
+.form-success-message {
+  border: 1px solid var(--success-color);
+  background-color: #e8f5e9;
+  color: var(--success-color);
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+.form-success-message h4 { color: inherit; font-weight: 600; }
+
+.form-error-message {
+  color: var(--danger-color);
+  background-color: #f8d7da;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
 
 /* ========== 3. FAQ Section Styling ========== */
 .contact-faq-section {
-  padding: 5rem 0;
+  padding: 6rem 0;
+  background-color: var(--light-gray-bg);
 }
-.section-title { font-weight: 700; margin-bottom: 3rem; text-align: center; }
-
+.contact-faq-section .section-title {
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 2.75rem); /* Responsive font size */
+  margin-bottom: 3rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 1rem;
+}
+.contact-faq-section .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+.accordion {
+    max-width: 800px;
+    margin-inline: auto;
+}
 .accordion-item {
-  margin-bottom: 1rem;
-  border: none !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.07);
-  overflow: hidden; /* Important for accordion animations */
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: none;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
 }
+.accordion-item:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+.accordion-header { border-bottom: 0; }
 .accordion-button {
   font-weight: 600;
-  padding: 1.5rem;
-  background-color: #ffffff !important;
-  color: #343a40 !important;
+  font-size: 1.1rem;
+  padding: 1.25rem 1.5rem;
+  background-color: #fff !important;
+  color: #111827 !important;
+  border-radius: 12px;
 }
 .accordion-button:focus { box-shadow: none; }
 .accordion-button::after {
-  transition: transform 0.3s ease;
+  background-size: 1rem;
 }
 .accordion-button:not(.collapsed) {
-  box-shadow: inset 0 -1px 0 #e9ecef;
+  color: var(--primary-color) !important;
+  box-shadow: none;
 }
-
 .accordion-body {
   padding: 0 1.5rem 1.5rem 1.5rem;
-  color: #6c757d;
+  color: #4b5563;
   line-height: 1.7;
 }
 
 .accordion-collapse { overflow: hidden; }
+/* Invalid input styling */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Error message styling */
+.invalid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Form error message (for server errors) */
+.form-error-message {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    border: 1px solid #f87171;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #dc2626;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+/* Form success message */
+.form-success-message {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    border-radius: 12px;
+    border: 1px solid #86efac;
+}
+
+.form-success-message .text-success {
+    color: #16a34a !important;
+}
+
+/* Submit button disabled state */
+.submit-btn.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.submit-btn.btn-disabled:hover {
+    transform: none !important;
+}
+
+/* Form validation summary */
+.form-validation-summary {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    padding: 8px 12px;
+    text-align: center;
+}
+
+/* Form subtitle */
+.form-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Spinner animation for loading button */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Enhanced form input focus states */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Read-only input styling */
+.form-control[readonly] {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+/* Responsive adjustments for validation messages */
+@media (max-width: 768px) {
+    .invalid-feedback {
+        font-size: 0.8rem;
+    }
+    
+    .form-error-message {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .form-success-message {
+        padding: 1.5rem;
+    }
+}
+
+/* Animation for form validation states */
+.form-control.is-invalid {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}
+
+/* Success button animation */
+.form-success-message button {
+    transition: all 0.3s ease;
+}
+
+.form-success-message button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

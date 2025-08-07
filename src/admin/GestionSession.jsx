@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FaCalendarAlt, FaPlus } from 'react-icons/fa';
-import { Button, Alert } from 'react-bootstrap';
-
+import { Button, Alert, Modal } from 'react-bootstrap';
 // Import components
 import SessionDetailsModal from './Sessions/SessionDetailsModal';
 import SessionUpdateModal from './Sessions/SessionUpdateModal';
-import SessionAddModal from './Sessions/SessionAddModal'; // <-- Import the new component
+import SessionAddModal from './Sessions/SessionAddModal';
 import SessionFilters from './Sessions/SessionFilters';
 import SessionTable from './Sessions/SessionTable';
 import SessionPagination from './Sessions/SessionPagination';
-
 // Import API functions
 import {
   fetchSessions,
   fetchSessionDetails,
   fetchCourses,
-  createSession as addSession, // <-- Import the new API function
+  createSession as addSession,
   updateSession,
   deleteSession
 } from '../Api/sessionApi';
@@ -29,16 +27,19 @@ const GestionSession = () => {
   const [page, setPage] = useState(1);
   
   // Modal states
-  const [addModalVisible, setAddModalVisible] = useState(false); // <-- State for the add modal
+  const [addModalVisible, setAddModalVisible] = useState(false);
   const [selectedIdForDetails, setSelectedIdForDetails] = useState(null);
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [sessionToEdit, setSessionToEdit] = useState(null);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   
+  // Confirmation modal state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState(null);
+  
   // Success/Error messages
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
   const queryClient = useQueryClient();
 
   // Query for sessions list with pagination
@@ -52,7 +53,7 @@ const GestionSession = () => {
     }
   });
 
-  // Query for courses (for filter and add/edit forms)
+  // Query for courses
   const { data: coursesData, isLoading: isLoadingCourses } = useQuery({
     queryKey: ['courses'],
     queryFn: fetchCourses,
@@ -73,7 +74,6 @@ const GestionSession = () => {
   });
 
   // --- MUTATIONS ---
-
   // Add mutation
   const addMutation = useMutation({
     mutationFn: addSession,
@@ -81,9 +81,8 @@ const GestionSession = () => {
       queryClient.invalidateQueries({ queryKey: ['sessions-paginated'] });
       setSuccessMessage(data.message || 'Session ajoutée avec succès!');
       setErrorMessage('');
-      setAddModalVisible(false); // Close modal on success
+      setAddModalVisible(false);
     },
-    // Error handling is done inside the modal to show validation errors
   });
 
   // Delete mutation
@@ -93,10 +92,14 @@ const GestionSession = () => {
       queryClient.invalidateQueries({ queryKey: ['sessions-paginated'] });
       setSuccessMessage(data.message || 'Session supprimée avec succès!');
       setErrorMessage('');
+      setShowDeleteConfirm(false);
+      setSessionToDelete(null);
     },
     onError: (error) => {
       setErrorMessage(error.message);
       setSuccessMessage('');
+      setShowDeleteConfirm(false);
+      setSessionToDelete(null);
     },
   });
 
@@ -118,7 +121,6 @@ const GestionSession = () => {
   });
 
   // --- HANDLERS ---
-
   const resetFilters = () => {
     setSearch('');
     setCoursId('');
@@ -136,7 +138,7 @@ const GestionSession = () => {
   const handleShowAddModal = () => setAddModalVisible(true);
   const handleCloseAddModal = () => setAddModalVisible(false);
   const handleAdd = (newData, options) => {
-      addMutation.mutate(newData, options);
+    addMutation.mutate(newData, options);
   };
 
   // Details Modal handlers
@@ -162,11 +164,21 @@ const GestionSession = () => {
     updateMutation.mutate({ id: sessionToEdit.id, ...updatedData });
   };
 
-  // Delete handler
-  const handleDelete = (sessionId) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette session ?')) {
-        deleteMutation.mutate(sessionId);
+  // Delete handlers
+  const handleDeleteRequest = (session) => {
+    setSessionToDelete(session);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (sessionToDelete) {
+      deleteMutation.mutate(sessionToDelete.id);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+    setSessionToDelete(null);
   };
 
   // Clear success/error messages after a delay
@@ -194,7 +206,6 @@ const GestionSession = () => {
               <FaCalendarAlt className="me-2 text-primary" />
               Gestion des Sessions
             </h2>
-            {/* This button now opens the add modal */}
             <Button variant="primary" onClick={handleShowAddModal}>
               <FaPlus className="me-2" />
               Nouvelle Session
@@ -204,12 +215,14 @@ const GestionSession = () => {
           {/* Success/Error Messages */}
           {successMessage && (
             <Alert variant="success" dismissible onClose={() => setSuccessMessage('')}>
+              <i className="bi bi-check-circle-fill me-2"></i>
               {successMessage}
             </Alert>
           )}
           
           {errorMessage && (
             <Alert variant="danger" dismissible onClose={() => setErrorMessage('')}>
+              <i className="bi bi-exclamation-triangle-fill me-2"></i>
               {errorMessage}
             </Alert>
           )}
@@ -222,7 +235,7 @@ const GestionSession = () => {
             setCoursId={setCoursId}
             disponibles={disponibles}
             setDisponibles={setDisponibles}
-            coursesData={coursesData} // Pass the array directly
+            coursesData={coursesData}
             isLoadingCourses={isLoadingCourses}
             resetFilters={resetFilters}
           />
@@ -242,6 +255,7 @@ const GestionSession = () => {
           {/* Error state */}
           {isError && !errorMessage && (
             <Alert variant="danger">
+              <i className="bi bi-exclamation-triangle-fill me-2"></i>
               Erreur lors du chargement des sessions: {error?.message}
             </Alert>
           )}
@@ -252,7 +266,7 @@ const GestionSession = () => {
             isLoading={isLoading}
             onViewDetails={handleViewDetails}
             onEdit={handleEdit}
-            onDelete={handleDelete}
+            onDelete={handleDeleteRequest}
             deleteMutation={deleteMutation}
           />
 
@@ -263,7 +277,6 @@ const GestionSession = () => {
           />
 
           {/* --- MODALS --- */}
-
           {/* Add Modal */}
           <SessionAddModal
             show={addModalVisible}
@@ -292,6 +305,48 @@ const GestionSession = () => {
             courses={coursesData?.data}
             isLoadingCourses={isLoadingCourses}
           />
+
+          {/* Delete Confirmation Modal */}
+          <Modal show={showDeleteConfirm} onHide={handleDeleteCancel} centered>
+            <Modal.Header closeButton className="border-0 pb-0">
+              <Modal.Title className="text-danger">
+                <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                Confirmer la suppression
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="pt-2">
+              <p className="mb-2">
+                Êtes-vous sûr de vouloir supprimer la session <strong>"{sessionToDelete?.titre}"</strong> ?
+              </p>
+              <div className="alert alert-warning mb-0">
+                <i className="bi bi-info-circle me-2"></i>
+                <small>Cette action est irréversible.</small>
+              </div>
+            </Modal.Body>
+            <Modal.Footer className="border-0 pt-0">
+              <Button variant="secondary" onClick={handleDeleteCancel}>
+                <i className="bi bi-x-circle me-1"></i>
+                Annuler
+              </Button>
+              <Button 
+                variant="danger" 
+                onClick={handleDeleteConfirm}
+                disabled={deleteMutation.isLoading}
+              >
+                {deleteMutation.isLoading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Suppression...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-trash me-1"></i>
+                    Supprimer
+                  </>
+                )}
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </div>
     </div>

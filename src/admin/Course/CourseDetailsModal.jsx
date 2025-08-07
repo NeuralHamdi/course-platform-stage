@@ -70,7 +70,7 @@ const CourseDetailsModal = ({ show, handleClose, data, isLoading, onDownloadRost
                   </Badge>
                 </p>
                 <p><strong>Durée:</strong> {courseData.duree} {courseData.duree_unite}</p>
-                <p><strong>Prix de référence:</strong> {formatCurrency(courseData.prix_reference)}</p>
+               
                 <p><strong>Module:</strong> {courseData.module_id}</p>
                 <p><strong>Créé le:</strong> {formatDate(courseData.created_at)}</p>
               </div>

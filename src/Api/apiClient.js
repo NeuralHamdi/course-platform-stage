@@ -5,7 +5,8 @@ const apiClient = axios.create({
     baseURL: 'http://mon-projet.test/api', // Your API base URL
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+       
     }
 });
 

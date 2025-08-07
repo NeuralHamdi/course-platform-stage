@@ -1,0 +1,117 @@
+/* Import a modern font for a better look (optional, but recommended) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  background-color: #f8f9fa; /* A slightly off-white background */
+  font-family: 'Inter', sans-serif; /* Apply the modern font */
+}
+
+/* --- Card Styling --- */
+.checkout-card {
+  border: 1px solid #e9ecef !important;
+  border-radius: 12px !important; /* Softer corners */
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  background-color: #ffffff;
+}
+
+.checkout-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+.checkout-card .card-header {
+  background-color: transparent !important;
+  border-bottom: 1px solid #e9ecef !important;
+  padding: 1.25rem 1.5rem;
+}
+
+.checkout-card .card-body {
+  padding: 1.5rem;
+}
+
+/* --- Specific Element Styling --- */
+.summary-image {
+  width: 100%;
+  height: 180px; /* Taller image */
+  object-fit: cover;
+  border-radius: 8px; /* Softer corners for the image */
+}
+
+.back-button {
+  border-radius: 50px; /* Pill-shaped button */
+  font-weight: 500;
+  border-width: 1px;
+}
+
+/* --- Payment Sidebar --- */
+.payment-sidebar {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+  position: sticky;
+  top: 20px;
+}
+
+.payment-sidebar .total-display {
+  background-color: #e9f5ff; /* A soft blue background */
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.payment-sidebar .total-display .total-label {
+  color: var(--bs-primary);
+  font-weight: 500;
+}
+
+.payment-sidebar .total-display .total-amount {
+  color: var(--bs-primary);
+  font-weight: 700;
+  font-size: 1.75rem;
+}
+
+.pay-button {
+  font-weight: 600;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+
+.pay-button:hover {
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    transform: translateY(-2px);
+}
+
+/* --- Enhanced Details List --- */
+.conditions-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.conditions-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.conditions-list .icon {
+  color: var(--bs-success);
+  margin-right: 0.75rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* Payment methods logos */
+.payment-methods img {
+  height: 25px;
+  filter: grayscale(1);
+  opacity: 0.7;
+  transition: all 0.2s ease-in-out;
+}
+.payment-methods img:hover {
+  filter: grayscale(0);
+  opacity: 1;
+}

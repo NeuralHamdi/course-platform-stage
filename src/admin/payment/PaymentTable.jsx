@@ -38,15 +38,7 @@ export const PaymentTable = ({ data, isLoading, onRefund ,onViewDetails}) => {
                         <td>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(p.montant)}</td>
                         <td>{new Date(p.date_paiement).toLocaleString('fr-FR')}</td>
                         <td>
-                            {p.status === 'completed' && (
-                                <>
-                                  <Button variant="outline-danger" size="sm" onClick={() => onRefund(p)}>
-                                    Rembourser
-                                </Button>
-                               
-                                </>
-                              
-                            )}
+                           
                               <Button variant="info" size="sm" className="me-2" onClick={() => onViewDetails(p)}>
                             <FaEye />
                                  </Button>

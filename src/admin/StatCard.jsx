@@ -162,7 +162,7 @@ function DashboardStats() {
     const {data:StudentActivity,isError:StudentActiveError,isLoading:isLoadingActiveStudent}=useQuery({queryKey:'StudentActivity',queryFn:StudentActive})
     
     const fetchCourses = async () => {
-        const response = await apiClient.get('/courses');
+        const response = await apiClient.get('/courses/count');
         return response.data;
     };
     const {data:courses,isError:isErrorCourse,isLoading:isLoadingCourse}=useQuery({ queryFn:fetchCourses, queryKey:'course' });
@@ -188,7 +188,7 @@ function DashboardStats() {
     // --- Logique d'affichage (inchangée) ---
     let RevenuValue = isLoadingRevenu ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isErrorRevenu ? <span className="text-danger">Erreur</span> : revenu ?Number( revenu.total_revenue.toFixed(2)) + '$' : 'N/A';
     let studentValue = isLoading ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isError ? <span className="text-danger">Erreur</span> : etudiants ? etudiants.length : 'N/A';
-    let courseValue = isLoadingCourse ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isErrorCourse ? <span className="text-danger">Erreur</span> : courses ? courses.length : 'N/A';
+    let courseValue = isLoadingCourse ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isErrorCourse ? <span className="text-danger">Erreur</span> : courses ? courses.total_courses : 'N/A';
 
     // --- NOUVELLE MISE EN PAGE JSX ---
     return (

@@ -1,54 +1,33 @@
 import React, { useState } from 'react';
 import { Card, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
-import { FaCreditCard, FaLock, FaShieldAlt, FaArrowLeft } from 'react-icons/fa';
+// Make sure to use icons for the new design
+import { FaCreditCard, FaLock, FaShieldAlt, FaArrowLeft, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
 import apiClient from '../Api/apiClient';
+
+// Import the new CSS file
+import '../style/PaymentCheckout.css';
 
 const PaymentCheckout = ({ selectedSession, currentUser, onBack, onPaymentStart }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // --- LOGIC REMAINS UNCHANGED ---
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('fr-MA', {
-      style: 'currency',
-      currency: 'MAD'
-    }).format(amount);
+    return new Intl.NumberFormat('fr-MA', { style: 'currency', currency: 'MAD' }).format(amount);
   };
-
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    return new Date(dateString).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   };
-  const syncPaymentStatus = async (inscriptionId) => {
-  try {
-    const response = await apiClient.post(`/payments/sync/${inscriptionId}`);
-    if (response.data.synced && response.data.inscription_status === 'confirmee') {
-      window.location.href = '/dashboard'; // ou une autre redirection
-    }
-  } catch (error) {
-    console.error('Erreur de synchronisation :', error);
-  }
-};
-
-
   const handlePayment = async () => {
     try {
       setLoading(true);
       setError(null);
-      
       onPaymentStart?.();
-
       const response = await apiClient.post('/payments/create-checkout', {
         session_id: selectedSession.id,
         etudiant_id: currentUser.id,
       });
-
-      // Redirect to Stripe Checkout
       window.location.href = response.data.checkout_url;
-
     } catch (err) {
       setError(err.response?.data?.error || 'Erreur lors de la création du paiement');
       console.error('Payment error:', err);
@@ -66,161 +45,148 @@ const PaymentCheckout = ({ selectedSession, currentUser, onBack, onPaymentStart 
     );
   }
 
+  // --- VIEW LOGIC IS UPDATED BELOW ---
   return (
-    <div>
+    <div className="container mt-4 mb-5">
       <div className="d-flex align-items-center mb-4">
-        <Button variant="outline-secondary" onClick={onBack} className="me-3">
+        <Button variant="light" onClick={onBack} className="me-3 back-button">
           <FaArrowLeft className="me-2" />
           Retour
         </Button>
-        <h4 className="mb-0">
-          <FaCreditCard className="me-2 text-primary" />
+        <h2 className="mb-0 fw-bold">
+          <FaCreditCard className="me-3 text-primary" />
           Finaliser votre inscription
-        </h4>
+        </h2>
       </div>
 
-      <Row>
-        <Col lg={8}>
-          {/* Order Summary */}
-          <Card className="border-0 shadow-sm mb-4">
-            <Card.Header className="bg-light border-0">
-              <h5 className="mb-0">Récapitulatif de votre commande</h5>
+      <Row className="g-4">
+        {/* Left Column: Order Details */}
+        <Col lg={7}>
+          {/* Order Summary Card */}
+          <Card className="checkout-card mb-4">
+            <Card.Header>
+              <h5 className="mb-0 fw-bold">Récapitulatif de la commande</h5>
             </Card.Header>
             <Card.Body>
-              <div className="row">
-                <div className="col-md-4">
+              <Row>
+                <Col md={4}>
                   <img 
-                    src={selectedSession.cours?.url_image || '/api/placeholder/300/200'} 
+                    src={selectedSession.cours?.url_image || 'https://via.placeholder.com/300x200/007BFF/FFFFFF?text=Cours'} 
                     alt={selectedSession.cours?.titre}
-                    className="img-fluid rounded"
-                    style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+                    className="summary-image"
                   />
-                </div>
-                <div className="col-md-8">
-                  <h6 className="text-primary">{selectedSession.cours?.titre}</h6>
-                  <h5 className="mb-2">{selectedSession.titre}</h5>
-                  <p className="text-muted mb-2">{selectedSession.cours?.description}</p>
+                </Col>
+                <Col md={8} className="d-flex flex-column">
+                  <h5 className="fw-bold text-primary">{selectedSession.cours?.titre}</h5>
+                  <h6 className="mb-2">{selectedSession.titre}</h6>
+                  <p className="text-muted small mb-3">{selectedSession.cours?.description}</p>
                   
-                  <div className="row g-2">
-                    <div className="col-sm-6">
-                      <small className="text-muted">Date de début:</small>
+                  <Row className="g-3 mt-auto">
+                    <Col sm={6}>
+                      <small className="text-muted d-block">Début de la session</small>
                       <div className="fw-medium">{formatDate(selectedSession.date_debut)}</div>
-                    </div>
-                    {selectedSession.date_fin_inscription && (
-                      <div className="col-sm-6">
-                        <small className="text-muted">Date de fin d'inscription:</small>
-                        <div className="fw-medium">{formatDate(selectedSession.date_fin_inscription)}</div>
-                      </div>
-                    )}
-                        {selectedSession.date_fin && (
-                      <div className="col-sm-6">
-                        <small className="text-muted">Date de fin:</small>
+                    </Col>
+                     {selectedSession.date_fin && (
+                      <Col sm={6}>
+                        <small className="text-muted d-block">Fin de la session</small>
                         <div className="fw-medium">{formatDate(selectedSession.date_fin)}</div>
-                      </div>
+                      </Col>
                     )}
-                    <div className="col-sm-6">
-                      <small className="text-muted">Places disponibles:</small>
-                      <div className="fw-medium">{selectedSession.places_disponibles}/{selectedSession.capacite_maximale}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <hr />
-
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <h6 className="mb-0">Total à payer</h6>
-                  <small className="text-muted">Paiement sécurisé via Stripe</small>
-                </div>
-                <h4 className="text-success mb-0">{formatCurrency(selectedSession.prix)}</h4>
-              </div>
+                    <Col sm={6}>
+                      <small className="text-muted d-block">Places restantes</small>
+                      <div className="fw-medium">{selectedSession.places_disponibles} / {selectedSession.capacite_maximale}</div>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
 
-          {/* Student Information */}
-          <Card className="border-0 shadow-sm mb-4">
-            <Card.Header className="bg-light border-0">
-              <h5 className="mb-0">Informations de l'étudiant</h5>
+          {/* Student Information Card */}
+          <Card className="checkout-card mb-4">
+            <Card.Header>
+              <h5 className="mb-0 fw-bold">Vos Informations</h5>
             </Card.Header>
             <Card.Body>
-              <div className="row">
-                <div className="col-md-6">
-                  <strong>Nom complet:</strong>
+              <Row>
+                <Col md={6} className="mb-2 mb-md-0">
+                  <strong className="d-block text-muted">Nom complet</strong>
                   <div>{currentUser.prenom} {currentUser.nom}</div>
-                </div>
-                <div className="col-md-6">
-                  <strong>Email:</strong>
+                </Col>
+                <Col md={6}>
+                  <strong className="d-block text-muted">Adresse e-mail</strong>
                   <div>{currentUser.email}</div>
-                </div>
-              </div>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
 
           {error && (
-            <Alert variant="danger" className="mb-4">
-              <h6>Erreur de paiement</h6>
-              <p className="mb-0">{error}</p>
+            <Alert variant="danger" className="d-flex align-items-center">
+              <FaInfoCircle size="1.5em" className="me-3" />
+              <div>
+                <h6 className="alert-heading">Erreur de paiement</h6>
+                {error}
+              </div>
             </Alert>
           )}
         </Col>
 
-        <Col lg={4}>
-          {/* Payment Actions */}
-          <Card className="border-0 shadow-sm sticky-top" style={{ top: '20px' }}>
-            <Card.Body>
-              <div className="text-center mb-4">
-                <FaShieldAlt className="text-success mb-2" size={32} />
-                <h6 className="text-success">Paiement 100% sécurisé</h6>
-                <small className="text-muted">
-                  Vos données sont protégées par le chiffrement SSL et Stripe
-                </small>
+        {/* Right Column: Payment Actions */}
+        <Col lg={5}>
+          <Card className="payment-sidebar shadow-sm">
+            <Card.Body className="p-4">
+              <div className="total-display d-flex justify-content-between align-items-center">
+                  <span className="total-label">Total à Payer</span>
+                  <span className="total-amount">{formatCurrency(selectedSession.prix)}</span>
               </div>
-
-              <div className="d-grid gap-2">
+            
+              <div className="d-grid gap-2 mb-4">
                 <Button
                   variant="success"
                   size="lg"
                   onClick={handlePayment}
                   disabled={loading}
-                  className="d-flex align-items-center justify-content-center"
+                  className="d-flex align-items-center justify-content-center pay-button"
                 >
                   {loading ? (
                     <>
                       <Spinner size="sm" className="me-2" />
-                      Redirection vers Stripe...
+                      Redirection en cours...
                     </>
                   ) : (
                     <>
-                      <FaCreditCard className="me-2" />
-                      Payer {formatCurrency(selectedSession.prix)}
+                      <FaLock className="me-2" />
+                      Payer en toute sécurité
                     </>
                   )}
                 </Button>
+              </div>
 
-                <div className="text-center mt-3">
-                  <div className="d-flex align-items-center justify-content-center mb-2">
-                    <FaLock className="text-muted me-2" />
-                    <small className="text-muted">Paiement sécurisé par Stripe</small>
-                  </div>
-                  <div className="d-flex justify-content-center gap-2">
-                    <img src="/api/placeholder/40/25" alt="Visa" className="border rounded" />
-                    <img src="/api/placeholder/40/25" alt="Mastercard" className="border rounded" />
-                    <img src="/api/placeholder/40/25" alt="PayPal" className="border rounded" />
-                  </div>
-                </div>
+              <div className="text-center text-muted small mb-4">
+                <FaShieldAlt className="me-1 text-success" /> Paiement 100% sécurisé via Stripe.
               </div>
 
               <hr />
 
-              <div className="small text-muted">
-                <h6 className="small">Conditions de paiement:</h6>
-                <ul className="ps-3 mb-0">
-                  <li>Le paiement est immédiatement débité</li>
-                  <li>Votre inscription sera confirmée après paiement</li>
-                  <li>Un reçu vous sera envoyé par email</li>
-                  <li>Remboursement possible selon nos conditions générales</li>
+              <div>
+                <h6 className="fw-bold mb-3">Votre inscription inclut :</h6>
+                <ul className="conditions-list">
+                  <li><FaCheckCircle className="icon" /> Paiement unique et sécurisé.</li>
+                  <li><FaCheckCircle className="icon" /> Confirmation immédiate de votre place.</li>
+                  <li><FaCheckCircle className="icon" /> Reçu de paiement envoyé par email.</li>
+                  <li><FaCheckCircle className="icon" /> Accès complet aux ressources du cours.</li>
                 </ul>
+              </div>
+
+              <div className="text-center mt-4">
+                <small className="text-muted d-block mb-2">Nous acceptons :</small>
+                {/* TIP: Replace these with real SVGs from your project's assets */}
+                <div className="d-flex justify-content-center gap-3 payment-methods">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" />
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" />
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/3/39/PayPal_logo.svg" alt="PayPal" />
+                </div>
               </div>
             </Card.Body>
           </Card>

@@ -14,7 +14,7 @@ const CourseUpdateModal = ({ show, handleClose, course, onUpdate, updateMutation
         duree: course.duree || '',
         duree_unite: course.duree_unite || 'weeks',
         niveau: course.niveau || 'Beginner',
-        prix_reference: course.prix_reference || '',
+       
         url_image: course.url_image || '',
         module_id: course.module_id || '',
         objectifs: course.objectifs ? course.objectifs.join('\n') : '', // Join objectives by newline for textarea
@@ -53,12 +53,7 @@ const CourseUpdateModal = ({ show, handleClose, course, onUpdate, updateMutation
                 <Form.Control type="text" name="titre" value={formData.titre} onChange={handleChange} required />
               </Form.Group>
             </Col>
-            <Col md={4}>
-              <Form.Group className="mb-3">
-                <Form.Label>Prix de Référence (€)</Form.Label>
-                <Form.Control type="number" step="0.01" name="prix_reference" value={formData.prix_reference} onChange={handleChange} required />
-              </Form.Group>
-            </Col>
+          
           </Row>
           
           <Form.Group className="mb-3">

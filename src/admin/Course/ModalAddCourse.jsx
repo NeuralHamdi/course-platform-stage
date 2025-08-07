@@ -12,7 +12,7 @@ const ModalAddCourse = ({ show, handleClose }) => {
     duree: '',
     duree_unite: 'weeks',
     niveau: 'Beginner',
-    prix_reference: '',
+  
     url_image: '',
     objectifs: [],
     module_id: '',
@@ -68,7 +68,7 @@ const handleSubmit = (e) => {
   const preparedData = {
     ...formData,
     duree: formData.duree ? parseInt(formData.duree, 10) : null,
-    prix_reference: formData.prix_reference ? parseFloat(formData.prix_reference) : null,
+   
     module_id: parseInt(formData.module_id, 10),
   };
 
@@ -103,13 +103,13 @@ const handleSubmit = (e) => {
             <div className="col-md-4">
               <Form.Group className="mb-3">
                 <Form.Label>Durée</Form.Label>
-                <Form.Control type="number" name="duree" value={formData.duree} onChange={handleChange} />
+                <Form.Control type="number" name="duree" value={formData.duree} onChange={handleChange} required/>
               </Form.Group>
             </div>
             <div className="col-md-4">
               <Form.Group className="mb-3">
                 <Form.Label>Unité de durée</Form.Label>
-                <Form.Select name="duree_unite" value={formData.duree_unite} onChange={handleChange}>
+                <Form.Select name="duree_unite" value={formData.duree_unite} onChange={handleChange} required>
                   <option value="hours">Heures</option>
                   <option value="days">Jours</option>
                   <option value="weeks">Semaines</option>
@@ -120,7 +120,7 @@ const handleSubmit = (e) => {
             <div className="col-md-4">
               <Form.Group className="mb-3">
                 <Form.Label>Niveau</Form.Label>
-                <Form.Select name="niveau" value={formData.niveau} onChange={handleChange}>
+                <Form.Select name="niveau" value={formData.niveau} onChange={handleChange} required>
                   <option value="Beginner">Débutant</option>
                   <option value="Intermediate">Intermédiaire</option>
                   <option value="Advanced">Avancé</option>
@@ -129,10 +129,7 @@ const handleSubmit = (e) => {
             </div>
           </div>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Prix (€)</Form.Label>
-            <Form.Control type="number" step="0.01" name="prix_reference" value={formData.prix_reference} onChange={handleChange} />
-          </Form.Group>
+          
 
           <Form.Group className="mb-3">
             <Form.Label>Image (URL)</Form.Label>
@@ -145,6 +142,7 @@ const handleSubmit = (e) => {
               type="text"
               placeholder="Ex: Apprendre les bases, Comprendre la logique"
               onChange={handleObjectifsChange}
+              required
             />
           </Form.Group>
 

@@ -1,179 +1,216 @@
 /* src/style/AboutPage.css */
 
+/* Using scoped variables is a best practice. They will only apply
+   inside .about-page and won't conflict with other styles. */
 .about-page {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  --primary-color: #0056d2; /* A strong, professional blue */
+  --secondary-color: #00c6ff; /* A vibrant accent for gradients and highlights */
+  --dark-bg: #111827; /* A deep, modern dark background */
+  --card-dark-bg: #1f2937;
+  --text-light: #f9fafb;
+  --text-dark: #374151;
+  --border-color: #e5e7eb;
 }
 
-/* ========== 1. Intro Section Styling ========== */
-.about-intro-section {
-  padding-bottom: 5rem;
-}
-
-.about-heading {
-  font-weight: 800;
-  line-height: 1.2;
-  color: #212529;
-}
-
-.about-text {
-  color: #6c757d;
-  font-size: 1.1rem;
-  line-height: 1.7;
-}
-
-.about-image-wrapper {
-  position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-}
-/* A decorative element behind the image */
-.about-image-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  background: linear-gradient(135deg, #007bff, #6f42c1);
-  z-index: -1;
-  border-radius: 1.5rem;
-  transform: rotate(-3deg);
-  transition: transform 0.4s ease;
-}
-.about-image-wrapper:hover::before {
-  transform: rotate(3deg);
-}
-
-/* ========== 2. Core Values Section Styling ========== */
-.about-values-section {
-  background-color: #f8f9fa;
-  padding: 5rem 0;
-  border-top: 1px solid #e9ecef;
-  border-bottom: 1px solid #e9ecef;
+.about-page {
+  font-family: 'Poppins', sans-serif; /* Recommended for a modern look */
 }
 
 .section-title {
   font-weight: 700;
+  font-size: clamp(2rem, 5vw, 2.75rem); /* Responsive font size */
   margin-bottom: 3rem;
-  color: #343a40;
+  position: relative;
+  padding-bottom: 1rem;
 }
 
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: 2px;
+}
+
+/* ========== 1. Intro Section Styling (Adjusted for consistency) ========== */
+.about-intro-section {
+  padding: 6rem 0;
+}
+.about-heading {
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  line-height: 1.2;
+  color: var(--text-dark);
+}
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #555;
+}
+.about-image-wrapper {
+  position: relative;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.about-image-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(35deg, rgba(0, 86, 210, 0.2), rgba(0, 198, 255, 0.1));
+  z-index: 1;
+}
+
+/* ========== 2. Core Values Section (REVAMPED) ========== */
+.about-values-section {
+  padding: 6rem 0;
+  background-color: var(--dark-bg); /* Using a dark background for high impact */
+}
+.about-values-section .section-title {
+  color: var(--text-light); /* Light text on dark background */
+}
+/* A new style for the value card for a modern, 'tech' look */
 .value-card {
-  width: 100%;
+  background: var(--card-dark-bg);
   padding: 2.5rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #374151;
   text-align: center;
-  background-color: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 1rem;
-  transition: all 0.3s ease;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%; /* Ensure it fills the column */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
-
+.value-card:hover {
+  border-color: var(--secondary-color); /* Highlight with accent color on hover */
+  transform: translateY(-10px); /* Lift effect */
+  box-shadow: 0 20px 40px rgba(0, 198, 255, 0.1);
+}
 .value-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f8d7da, #f5c2c7);
-  color: #dc3545;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
-  transition: all 0.3s ease;
+  display: inline-block;
+  color: var(--secondary-color); /* Use a vibrant accent color */
 }
-.value-card:hover .value-icon {
-  transform: scale(1.1) rotate(-10deg);
-  box-shadow: 0 10px 20px rgba(220, 53, 69, 0.2);
-}
-
 .value-title {
   font-weight: 600;
-  color: #343a40;
-  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-light);
 }
-
 .value-description {
+  color: #d1d5db; /* Lighter text for readability */
   font-size: 0.95rem;
-  color: #6c757d;
+  line-height: 1.6;
 }
 
-/* ========== 3. Unique Approach Section Styling ========== */
+/* ========== 3. Unique Approach Section (Adjusted for consistency) ========== */
 .about-approach-section {
-  padding-top: 5rem;
+  padding: 6rem 0;
+  background-color: #f8f9fa; /* A light background to contrast the dark values section */
 }
-
 .approach-card {
   display: flex;
   align-items: flex-start;
-  padding: 1.5rem;
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  border: 1px solid #e9ecef;
+  gap: 1.5rem;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
   height: 100%;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .approach-card:hover {
-  border-left: 4px solid #007bff;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  transform: translateX(5px);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
 }
-
 .approach-icon {
-  color: #007bff;
-  font-size: 1.5rem;
-  margin-right: 1.5rem;
-  padding-top: 5px;
+  flex-shrink: 0;
+  font-size: 2rem;
+  color: var(--primary-color);
 }
-
 .approach-title {
-  font-weight: 700;
-  color: #343a40;
-  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
 }
-
 .approach-description {
-  color: #6c757d;
   font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
 }
 
-/* ========== 4. Call to Action Section ========== */
+/* ========== 4. Call to Action Section (REVAMPED) ========== */
 .about-cta-section {
-  margin-top: 5rem;
-  padding: 4rem 2rem;
-  background-color: #343a40;
+  padding: 6rem 2rem;
+  margin-top: 2rem;
+  /* ACTION: This is where the background image is loaded. */
+  /* You can use this excellent subtle pattern or replace the URL with your own. */
+  background-image: 
+    linear-gradient(135deg, rgba(0, 86, 210, 0.95), rgba(1, 42, 108, 0.97)),
+    url('https://www.toptal.com/designers/subtlepatterns/uploads/double-bubble-outline.png');
+  background-blend-mode: multiply; /* This creates the professional overlay effect */
+  background-size: cover;
+  background-position: center;
   color: white;
-  border-radius: 1rem;
+  text-align: center;
+  border-radius: 20px;
 }
 
 .cta-title {
   font-weight: 700;
-  color: white;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  margin-bottom: 1rem;
+  color: #fff;
 }
-
 .cta-subtitle {
-  color: #adb5bd;
-  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-inline: auto;
+  margin-bottom: 2.5rem; /* More space before buttons */
+  opacity: 0.9;
+  font-size: 1.1rem;
 }
-
 .cta-buttons {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.cta-btn {
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: 50px; /* Pill-shaped buttons */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-width: 2px;
+  transition: all 0.3s ease;
 }
 
-.cta-btn.btn-primary {
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+/* Primary Button: White fill, brand color text */
+.btn-primary.cta-btn {
+  background-color: #fff;
+  border-color: #fff;
+  color: var(--primary-color);
+}
+/* Hover: Transparent fill, white text */
+.btn-primary.cta-btn:hover {
+  background-color: transparent;
+  color: #fff;
 }
 
-.cta-btn.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+/* Secondary Button: Transparent fill, white text */
+.btn-secondary.cta-btn {
+  background-color: transparent;
+  border-color: #fff;
+  color: #fff;
+}
+/* Hover: White fill, brand color text */
+.btn-secondary.cta-btn:hover {
+  background-color: #fff;
+  border-color: #fff;
+  color: var(--primary-color);
 }

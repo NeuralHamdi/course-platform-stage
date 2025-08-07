@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
-import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FaCheckCircle } from 'react-icons/fa';
 import apiClient from '../../Api/apiClient';
@@ -12,10 +11,11 @@ const AddEtudiantModal = ({ show, handleClose }) => {
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
   const [email, setEmail] = useState('');
+  const [telephone, setTelephone] = useState(''); // NOUVEAU : État pour le téléphone
   const [password, setPassword] = useState('');
   const [profession, setProfession] = useState('');
   const [niveau_Etudes, setNiveauEtudes] = useState('');
-
+  
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState('');
 
@@ -23,7 +23,13 @@ const AddEtudiantModal = ({ show, handleClose }) => {
   const addMutation = useMutation({
     mutationFn: async () => {
       const response = await apiClient.post('/register', {
-        nom, prenom, email, password, profession, niveau_Etudes
+        nom, 
+        prenom, 
+        email, 
+        telephone, // NOUVEAU : Ajout du téléphone dans la requête
+        password, 
+        profession, 
+        niveau_Etudes
       });
       return response.data;
     },
@@ -31,13 +37,16 @@ const AddEtudiantModal = ({ show, handleClose }) => {
       setSuccess("Étudiant ajouté avec succès !");
       setErrors([]);
       queryClient.invalidateQueries(['etudiants']); // Refresh la liste
+      
       // Reset le formulaire après succès
       setNom('');
       setPrenom('');
       setEmail('');
+      setTelephone(''); // NOUVEAU : Réinitialisation du téléphone
       setPassword('');
       setProfession('');
       setNiveauEtudes('');
+      
       // Ferme le modal après 2s
       setTimeout(() => {
         setSuccess('');
@@ -96,6 +105,19 @@ const AddEtudiantModal = ({ show, handleClose }) => {
           <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
             <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </Form.Group>
+
+          {/* NOUVEAU : Champ de formulaire pour le téléphone */}
+          <Form.Group className="mb-3">
+            <Form.Label>Téléphone</Form.Label>
+            <Form.Control 
+              type="tel" 
+              placeholder="Ex: 0612345678"
+              value={telephone} 
+              onChange={(e) => setTelephone(e.target.value)} 
+              required
+              // Ce champ n'est pas "required" car il est "nullable" dans votre base de données
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet, useNavigate, replace, Navigate } from 'react-router-dom';
 
+
 // Import Global Styles
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -74,6 +75,7 @@ const PublicLayout = () => {
 
 function App() {
   return (
+  
     <Router>
       <Routes>
   
@@ -118,6 +120,7 @@ function App() {
 
       </Routes>
     </Router>
+
   );
 }
 
