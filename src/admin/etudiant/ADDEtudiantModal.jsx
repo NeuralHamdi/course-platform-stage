@@ -18,6 +18,7 @@ const AddEtudiantModal = ({ show, handleClose }) => {
   
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState('');
+  const [sexe,setSexe] = useState(''); // NOUVEAU : État pour le sexe
 
   // Mutation React Query
   const addMutation = useMutation({
@@ -29,7 +30,8 @@ const AddEtudiantModal = ({ show, handleClose }) => {
         telephone, // NOUVEAU : Ajout du téléphone dans la requête
         password, 
         profession, 
-        niveau_Etudes
+        niveau_Etudes,
+        sexe
       });
       return response.data;
     },
@@ -46,6 +48,7 @@ const AddEtudiantModal = ({ show, handleClose }) => {
       setPassword('');
       setProfession('');
       setNiveauEtudes('');
+      setSexe(''); // NOUVEAU : Réinitialisation du sexe
       
       // Ferme le modal après 2s
       setTimeout(() => {
@@ -100,6 +103,16 @@ const AddEtudiantModal = ({ show, handleClose }) => {
           <Form.Group className="mb-3">
             <Form.Label>Prénom</Form.Label>
             <Form.Control type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} required />
+          </Form.Group>
+          {/* NOUVEAU : Champ de formulaire pour le sexe */}
+          <Form.Group className="mb-3">
+            <Form.Label>Sexe</Form.Label>
+            <Form.Select value={sexe} onChange={(e) => setSexe(e.target.value)} required>
+              <option value="">-- Choisir --</option>
+              <option value="homme">Masculin</option>
+              <option value="femme">Féminin</option>
+             
+            </Form.Select>
           </Form.Group>
 
           <Form.Group className="mb-3">

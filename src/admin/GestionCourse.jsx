@@ -3,6 +3,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FaLayerGroup, FaPlus } from 'react-icons/fa';
 import { Button, Alert, Spinner } from 'react-bootstrap';
 
+// --- NEW IMPORTS for styled alerts and confirmations ---
+import { ToastContainer, toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+
 // Import API functions
 import { fetchCourses, fetchCourseDetails, createCourse, updateCourse, deleteCourse } from '../Api/courseApi';
 import apiClient from '../Api/apiClient';
@@ -12,9 +19,10 @@ import CourseTable from './Course/CourseTable';
 import CoursePagination from './Course/CoursePagination';
 import CourseDetailsModal from './Course/CourseDetailsModal';
 import CourseUpdateModal from './Course/CourseUpdateModal';
-import ModalAddCourse from './Course/ModalAddCourse'; // Assuming you have this component
+import ModalAddCourse from './Course/ModalAddCourse';
 import axios from 'axios';
-import {useAuth} from '../context/AuthContext'
+import {useAuth} from '../context/AuthContext';
+
 const CoursePage = () => {
     // State for filters and pagination
     const [filters, setFilters] = useState({
@@ -23,10 +31,9 @@ const CoursePage = () => {
         duration: '',
         moduleId: '',
         enrollmentSort:'',
-   
         page: 1,
     });
-    const {token} =useAuth();
+    const {token} = useAuth();
 
     // State for modals
     const [selectedIdForDetails, setSelectedIdForDetails] = useState(null);
@@ -38,7 +45,7 @@ const CoursePage = () => {
     // Query for the list of courses
     const { data, isLoading, isError, isFetching, error } = useQuery({
         queryKey: ['courses-paginated', filters],
-        queryFn: fetchCourses,
+        queryFn: fetchCourses, // Pass filters to the fetch function
         keepPreviousData: true,
     });
 
@@ -50,12 +57,14 @@ const CoursePage = () => {
     });
 
     // --- MUTATIONS ---
+    // --- MODIFIED: Reusable mutation hook now uses react-toastify for success feedback ---
     const useCourseMutation = (mutationFn, successMessage) => {
         return useMutation({
             mutationFn,
             onSuccess: (data) => {
                 queryClient.invalidateQueries({ queryKey: ['courses-paginated'] });
-                alert(data.message || successMessage);
+                // Use toast for a clean, non-blocking notification
+                toast.success(data.message || successMessage);
                 // Close any open modals on success
                 setCourseToEdit(null);
                 setAddModalVisible(false);
@@ -63,37 +72,31 @@ const CoursePage = () => {
             onError: (error) => {
                 console.error("Mutation Error:", error);
                 const errorMessage = error.message || "Une erreur est survenue.";
-                const errorDetails = error.errors ? `\nDetails: ${JSON.stringify(error.errors)}` : '';
-                alert(`Échec: ${errorMessage}${errorDetails}`);
+                // Use toast for error messages as well for consistency
+                toast.error(`Échec: ${errorMessage}`);
             }
         });
     };
     
     const handleDownloadSessionRoster = async (sessionId, sessionTitle) => {
-    // ... (This function will have the same axios logic as before) ...
-    try {
-        const response = await apiClient.get(`/sessions/${sessionId}/roster`, {
-            responseType: 'blob',
-            // ... (headers with auth token) ...
-        
-        });
-        
-        // ... (The rest of the logic to create a link and trigger the download is the same) ...
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `liste-presence-${sessionTitle}.xlsx`);
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
+        try {
+            const response = await apiClient.get(`/sessions/${sessionId}/roster`, {
+                responseType: 'blob',
+            });
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `liste-presence-${sessionTitle}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
 
-    } catch (error) {
-        console.error("Session Roster Download Error:", error);
-        alert("Échec du téléchargement de la liste pour la session.");
-    }
-};
-
-
+        } catch (error) {
+            console.error("Session Roster Download Error:", error);
+            toast.error("Échec du téléchargement de la liste pour la session.");
+        }
+    };
 
     const addMutation = useCourseMutation(createCourse, 'Cours ajouté avec succès!');
     const updateMutation = useCourseMutation(updateCourse, 'Cours mis à jour avec succès!');
@@ -107,11 +110,26 @@ const CoursePage = () => {
     const resetFilters = () => {
         setFilters({ search: '', level: '', duration: '', moduleId: '', enrollmentSort:'', page: 1 });
     };
-
+    
+    // --- MODIFIED: handleDelete now uses a styled confirmation dialog ---
     const handleDelete = (courseId, courseTitle) => {
-        if (window.confirm(`Êtes-vous sûr de vouloir supprimer le cours "${courseTitle}" ?`)) {
-            deleteMutation.mutate(courseId);
-        }
+        confirmAlert({
+            title: 'Confirmation de suppression',
+            message: `Êtes-vous sûr de vouloir supprimer le cours "${courseTitle}" ? Cette action est irréversible.`,
+            buttons: [
+                {
+                    label: 'Oui, supprimer',
+                    className: 'btn btn-danger', // Apply bootstrap class
+                    onClick: () => deleteMutation.mutate(courseId)
+                },
+                {
+                    label: 'Non, annuler',
+                    className: 'btn btn-secondary' // Apply bootstrap class
+                }
+            ],
+             // This provides a smoother experience
+            closeOnClickOutside: true,
+        });
     };
 
     const handleUpdate = (updatedData) => {
@@ -124,6 +142,20 @@ const CoursePage = () => {
 
     return (
         <div className="container-fluid py-4">
+            {/* --- ADDED: ToastContainer for displaying all notifications --- */}
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
+
             <div className="row">
                 <div className="col-12">
                     {/* Header */}
@@ -158,14 +190,13 @@ const CoursePage = () => {
                     )}
 
                     {/* Modals */}
-<CourseDetailsModal
-    show={!!selectedIdForDetails}
-    handleClose={() => setSelectedIdForDetails(null)}
-    data={selectedCourse}
-    isLoading={isFetchingDetail}
-    // <<< ADD THIS LINE TO FIX THE ERROR
-    onDownloadRoster={handleDownloadSessionRoster}
-/>
+                    <CourseDetailsModal
+                        show={!!selectedIdForDetails}
+                        handleClose={() => setSelectedIdForDetails(null)}
+                        data={selectedCourse}
+                        isLoading={isFetchingDetail}
+                        onDownloadRoster={handleDownloadSessionRoster}
+                    />
                     <CourseUpdateModal
                         show={!!courseToEdit}
                         handleClose={() => setCourseToEdit(null)}

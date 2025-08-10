@@ -32,12 +32,19 @@ import StudentTable from './admin/StudentTable.jsx';
 import CoursePage from './admin/GestionCourse.jsx';
 import ModulesPage from './admin/ModulesPage.jsx';
 import GestionSession from './admin/GestionSession.jsx';
+import ConsultingServices from './components/pages/ConsultingPage.jsx';
 
 import PaymentsPage from './admin/PayementPages.jsx';
 import PaymentSuccessPage from './components/pages/PaymentSuccessPage.jsx';
 import PaymentCancelPage from './components/pages/PaymentCancelPage.jsx';
 import InscriptionPage from './components/pages/InscriptionPage.jsx';
 import DashboardPage from './components/pages/DashboardPage.jsx';
+
+
+//animation
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+AOS.init({ duration: 800, once: true, offset: 100 });
 /**
  * PublicLayout: Wraps all public pages to provide the Navbar and Footer.
  */
@@ -89,6 +96,7 @@ function App() {
           <Route path="contact" element={<ContactPage />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
+          <Route path='consulting'  element={<ConsultingServices/>} />
           <Route path="courses/:id" element={<CourseDetails />} />
           <Route path="/unauthorized" element={<Unauthorized/>}/>
           
