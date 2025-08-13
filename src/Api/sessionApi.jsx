@@ -6,13 +6,14 @@ import apiClient from './apiClient'; // Import the centralized Axios instance
  * Fetches a paginated list of sessions based on filters.
  */
 export const fetchSessions = async ({ queryKey }) => {
-  const [, { search, coursId, disponibles, page }] = queryKey;
+  const [, { search, coursId, disponibles, page, statut }] = queryKey;
   try {
     const response = await apiClient.get('/sessions', {
       params: { 
         search: search || undefined, 
         cours_id: coursId || undefined, 
-        disponibles: disponibles || false, 
+        disponibles: disponibles || false,
+         statut: statut || undefined,
         page: page || 1, 
         per_page: 10 
       },

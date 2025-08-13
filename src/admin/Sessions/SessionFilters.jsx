@@ -1,7 +1,11 @@
 
 import React from 'react';
-import { FaSearch, FaBook, FaUsers, FaUndo } from 'react-icons/fa';
-
+import { FaSearch, FaBook, FaUsers, FaUndo , FaRegClock} from 'react-icons/fa';
+const sessionStatuses = [
+  { value: 'a_venir', label: 'À venir' },
+  { value: 'active', label: 'Active' },
+  { value: 'terminee', label: 'Terminée' },
+];
 const SessionFilters = ({ 
   search, 
   setSearch, 
@@ -9,16 +13,18 @@ const SessionFilters = ({
   setCoursId, 
   disponibles, 
   setDisponibles, 
+  statut,
+  setStatut,
   coursesData, 
   resetFilters 
 }) => {
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleCoursIdChange = (e) => setCoursId(e.target.value);
   const handleDisponiblesChange = (e) => setDisponibles(e.target.checked);
-
+  const handleStatutChange = (e) => setStatut(e.target.value);
   const clearSearch = () => setSearch('');
   const clearCoursId = () => setCoursId('');
-
+    const clearStatut = () => setStatut('');
   return (
     <div className="card mb-4">
       <div className="card-body">
@@ -51,7 +57,7 @@ const SessionFilters = ({
           </div>
 
           {/* Filtre par cours */}
-          <div className="col-12 col-sm-6 col-lg-3">
+          <div className="col-12 col-sm-6 col-lg-2">
             <label className="form-label">
               <FaBook className="me-1" />
               Cours
@@ -76,6 +82,27 @@ const SessionFilters = ({
                   type="button"
                   title="Effacer le filtre cours"
                 >
+                  &times;
+                </button>
+              )}
+            </div>
+          </div>
+            <div className="col-12 col-sm-6 col-md-4 col-lg-2">
+            <label className="form-label">
+              <FaRegClock className="me-1" />
+              Statut
+            </label>
+            <div className="input-group">
+              <select className="form-select" value={statut} onChange={handleStatutChange}>
+                <option value="">Tous les statuts</option>
+                {sessionStatuses.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+              {statut && (
+                <button className="btn btn-outline-secondary" onClick={clearStatut} type="button" title="Effacer le filtre statut">
                   &times;
                 </button>
               )}
@@ -118,7 +145,7 @@ const SessionFilters = ({
         </div>
 
         {/* Filtres actifs */}
-        {(search || coursId || disponibles) && (
+        {(search || coursId || disponibles || statut) && (
           <div className="mt-3 pt-3 border-top">
             <small className="text-muted">Filtres actifs:</small>
             <div className="mt-1">
@@ -141,6 +168,12 @@ const SessionFilters = ({
                     style={{ fontSize: '0.6em' }}
                   ></button>
                 </span>
+              )}
+               {statut && (
+                 <span className="badge bg-light text-dark">
+                   Statut: {sessionStatuses.find(s => s.value === statut)?.label || statut}
+                   <button className="btn-close btn-sm ms-1" onClick={clearStatut} style={{ fontSize: '0.6em' }}></button>
+                 </span>
               )}
               {disponibles && (
                 <span className="badge bg-light text-dark me-2">

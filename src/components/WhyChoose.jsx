@@ -9,22 +9,22 @@ const features = [
   {
     icon: <FaUserTie />,
     title: "Expert Instructors",
-    description: "Learn from industry veterans and thought leaders with real-world experience.",
+    description: "Learn from active consultants who solve real-world IT, IoT, and CS challenges daily, not just teach theory."
   },
   {
     icon: <FaLightbulb />,
     title: "Innovative Curriculum",
-    description: "Stay ahead with cutting-edge content and practical, skills-focused training.",
+    description: "Our courses are constantly updated with insights from our consulting projects, ensuring you learn the most relevant and in-demand skills."
   },
   {
     icon: <FaUsers />,
     title: "Strong Community",
-    description: "Connect with peers, expand your network, and collaborate on exciting projects.",
+    description: "Join a dynamic network of ambitious learners, professionals, and innovators. Collaborate, share ideas, and build connections that matter."
   },
   {
     icon: <FaChartLine />,
     title: "Career Advancement",
-    description: "Our programs are designed to accelerate your professional growth and open new opportunities.",
+    description: "Gain more than a certificate. Our practical, industry-vetted approach gives you a direct path to tangible career growth and opportunities."
   },
 ];
 

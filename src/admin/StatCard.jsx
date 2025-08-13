@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import apiClient from '../Api/apiClient';
@@ -184,12 +184,27 @@ function DashboardStats() {
         return response.data || [];
     };
     const { data: revenueGrowthData = [], isLoading: isLoadingRevenueGrowth, isError: isErrorRevenueGrowth } = useQuery({ queryKey: ['revenueGrowthData'], queryFn: fetchRevenueGrowth });
-    
+    const fetchSubscriptions = async () => {
+    const response = await apiClient.get('/subscriptions/count');
+    return response.data || { total_subscriptions: 0 };
+};
+const { 
+    data: subscriptionsData = {}, 
+    isLoading: isLoadingSubscriptions, 
+    isError: isErrorSubscriptions 
+} = useQuery({
+    queryKey: ['subscriptionsData'],
+    queryFn: fetchSubscriptions
+});
     // --- Logique d'affichage (inchangée) ---
     let RevenuValue = isLoadingRevenu ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isErrorRevenu ? <span className="text-danger">Erreur</span> : revenu ?Number( revenu.total_revenue.toFixed(2)) + '$' : 'N/A';
     let studentValue = isLoading ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isError ? <span className="text-danger">Erreur</span> : etudiants ? etudiants.length : 'N/A';
     let courseValue = isLoadingCourse ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> : isErrorCourse ? <span className="text-danger">Erreur</span> : courses ? courses.total_courses : 'N/A';
-
+    let subscriptionValue = isLoadingSubscriptions 
+    ? <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div>
+    : isErrorSubscriptions 
+        ? <span className="text-danger">Erreur</span>
+        : subscriptionsData.total_subscriptions ?? 'N/A';
     // --- NOUVELLE MISE EN PAGE JSX ---
     return (
         <div className="container-fluid p-4">
@@ -197,9 +212,9 @@ function DashboardStats() {
             {/* Rangée 1: Cartes de statistiques */}
             <div className="row">
                 <StatCard title="Total Students" value={studentValue} icon="bi-people"/>
-                <StatCard title="Active Courses" value={courseValue} icon="bi-book"/>
+                <StatCard title="Total Courses" value={courseValue} icon="bi-book"/>
                 <StatCard title="Total Revenue" value={RevenuValue} icon="bi-wallet2"/>
-                <StatCard title="Upcoming Sessions" value="112" icon="bi-calendar-event"/>
+                <StatCard title="Total Subscriptions" value={subscriptionValue} icon="bi-calendar-event"/>
             </div>
 
             {/* Rangée 2: Inscriptions Récentes & Tendances d'Inscription */}

@@ -10,8 +10,8 @@ import apiClient from '../Api/apiClient';
 
 // --- Page Data (No Changes) ---
 const contactInfoCards = [
-  { icon: <FaMapMarkerAlt />, text: "123 Professional Way, Knowledge City" },
-  { icon: <FaEnvelope />, text: "info@protrainhub.com" },
+  { icon: <FaMapMarkerAlt />, text: "Localisation du centre : Bureaux N° 16 & 17 3 eme Etage Immob Guedira lot Elmassira N° P1883 , Agadir, Morocco, 810000" },
+  { icon: <FaEnvelope />, text: "info@centre-aah.com" },
   { icon: <FaPhoneAlt />, text: "+1 (800) 555-0199" }
 ];
 
@@ -370,7 +370,7 @@ export default function ContactPage() {
             </motion.div>
             <motion.div className="col-lg-6" initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: "easeOut" }}>
               <div className="map-card">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3441.59560384814!2d-9.565980625345799!3d30.411833574744047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb3b6f0e3e230ef%3A0x6b4f7a26f3c15f5!2sFacult%C3%A9%20des%20sciences%20juridiques%20%C3%A9conomiques%20et%20sociales!5e0!3m2!1sfr!2sma!4v1717351608665!5m2!1sfr!2sma" width="100%" height="450" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Our Location"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d215.0538881662523!2d-9.563877379496224!3d30.411651011459192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s%20Immob%20Guedira!5e0!3m2!1sfr!2sma!4v1755081080678!5m2!1sfr!2sma" width="100%" height="550" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Our Location"></iframe>
               </div>
             </motion.div>
           </div>

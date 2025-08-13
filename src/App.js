@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet, useNavigate, replace, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 
 
 // Import Global Styles
@@ -11,14 +11,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 // Import Layout Components
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
-import Sidebar from './admin/Sidebar.jsx';
+
 import AdminLoyout from './admin/AdminLayout.jsx';
 import DashboardStats from './admin/StatCard.jsx';
 
 // Import Page/Route Components
 import Home from './components/pages/Home.jsx';
 import FilterCourses from './components/Programs.jsx';
-import Cours from './components/ListerCours.jsx';
+
 import AboutSection from './components/Apropos.jsx';
 import ContactPage from './components/Contact.jsx';
 import Login from './components/Login.jsx';
@@ -32,6 +32,7 @@ import StudentTable from './admin/StudentTable.jsx';
 import CoursePage from './admin/GestionCourse.jsx';
 import ModulesPage from './admin/ModulesPage.jsx';
 import GestionSession from './admin/GestionSession.jsx';
+import SubscriptionsPage from './admin/SubscriptionsPage.jsx';
 import ConsultingServices from './components/pages/ConsultingPage.jsx';
 
 import PaymentsPage from './admin/PayementPages.jsx';
@@ -50,7 +51,7 @@ AOS.init({ duration: 800, once: true, offset: 100 });
  */
 const PublicLayout = () => {
   const { user } = useAuth();  
-  const navigate=useNavigate();
+
 
     if(user&&user.role==='administrateur'){
       return <Navigate to='/admin' replace/>
@@ -91,7 +92,7 @@ function App() {
         <Route path='/' element={<PublicLayout />}>
           <Route index element={<Home/>}/>
           <Route path="Programs" element={<FilterCourses />} />
-          <Route path="modules/:id" element={<Cours />} />
+       
           <Route path="Apropos" element={<AboutSection />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="login" element={<Login />} />
@@ -121,6 +122,7 @@ function App() {
      <Route path='modules' element={<ModulesPage/>}/>
       <Route path='sessions' element={<GestionSession/>}/>
       <Route path='payments' element={<PaymentsPage/>}/>
+      <Route path='subscriptions' element={<SubscriptionsPage/>}/>
   </Route>
 </Route>
 

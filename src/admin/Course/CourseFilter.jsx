@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaSearch, FaLayerGroup, FaClock, FaFolder, FaUndo, FaUsers, FaSortAmountUp, FaSortAmountDown } from 'react-icons/fa';
 
-const CourseFilters = ({ filters, setFilters, resetFilters }) => {
+const CourseFilters = ({ filters, setFilters, resetFilters ,modules, isLoadingModules}) => {
     
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -98,19 +98,26 @@ const CourseFilters = ({ filters, setFilters, resetFilters }) => {
                     </div>
 
                     {/* Filter by Module ID */}
-                    <div className="col-12 col-sm-6 col-lg-2">
+               <div className="col-12 col-sm-6 col-lg-2">
                         <label className="form-label">
-                            <FaFolder className="me-1" /> Module ID
+                            <FaFolder className="me-1" /> Module
                         </label>
                         <div className="input-group">
-                            <input 
-                                type="number" 
-                                className="form-control" 
-                                name="moduleId" 
-                                placeholder="ID" 
+                            {/* 2. Replace the input with this select dropdown */}
+                            <select 
+                                className="form-select" 
+                                name="moduleId" // Keep the name the same!
                                 value={filters.moduleId} 
-                                onChange={handleInputChange} 
-                            />
+                                onChange={handleInputChange}
+                                disabled={isLoadingModules} // Disable while loading
+                            >
+                                <option value="">Tous les modules</option>
+                                {modules?.map((module) => (
+                                    <option key={module.id} value={module.id}>
+                                        {module.titre} 
+                                    </option>
+                                ))}
+                            </select>
                             {filters.moduleId && (
                                 <button 
                                     className="btn btn-outline-secondary" 

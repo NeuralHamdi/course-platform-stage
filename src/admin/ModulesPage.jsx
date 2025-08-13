@@ -11,7 +11,7 @@ function ModulesPage() {
 
     // --- 1. Data Fetching with Improved Loading States ---
     const { 
-        data: modules, 
+        data: modules=[], 
         isError, 
         error, 
         isLoading, 
@@ -28,21 +28,23 @@ function ModulesPage() {
                 console.log('API Response:', response.data);
                 
                 // Gestion plus flexible de la structure de données
-                let moduleData = [];
-                if (response.data) {
-                    if (Array.isArray(response.data)) {
-                        moduleData = response.data;
-                    } else if (Array.isArray(response.data.data)) {
-                        moduleData = response.data.data;
-                    } else if (Array.isArray(response.data.modules)) {
-                        moduleData = response.data.modules;
-                    }
+             let moduleData = [];
+            if (response.data) {
+                if (Array.isArray(response.data)) {
+                    moduleData = response.data;
+                } else if (Array.isArray(response.data.data)) {
+                    moduleData = response.data.data;
+                } else if (Array.isArray(response.data.modules)) {
+                    moduleData = response.data.modules;
                 }
+            }
                 
-                console.log('Processed modules:', moduleData);
+               
                 return moduleData;
             } catch (error) {
-                console.error('Error fetching modules:', error);
+                <p>
+                    Erreur lors de la récupération des modules : {error.message}
+                </p>
                 throw error;
             }
         },
@@ -260,10 +262,10 @@ function ModulesPage() {
                                 <tr key={module.id || index}>
                                     <td>{module.id || 'N/A'}</td>
                                     <td>
-                                        {module.url_images || module.image_url || module.image ? (
+                                        {module.url_images  ? (
                                             <img 
-                                                src={module.url_images || module.image_url || module.image} 
-                                                alt={module.titre || module.title || module.name || 'Module'} 
+                                                src={module.url_images} 
+                                                alt={module.titre || 'Module'} 
                                                 style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: '4px' }}
                                                 onError={(e) => {
                                                     e.target.style.display = 'none';
@@ -271,11 +273,11 @@ function ModulesPage() {
                                                 }}
                                             />
                                         ) : null}
-                                        <em style={{ display: module.url_images || module.image_url || module.image ? 'none' : 'block' }}>
+                                        <em style={{ display: module.url_images  ? 'none' : 'block' }}>
                                             No image
                                         </em>
                                     </td>
-                                    <td>{module.titre || module.title || module.name || 'Unnamed'}</td>
+                                    <td>{module.titre  || 'Unnamed'}</td>
                                     <td>
                                         {(module.description && module.description.trim()) ? (
                                             module.description.length > 80 

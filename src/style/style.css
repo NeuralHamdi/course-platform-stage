@@ -145,3 +145,7 @@
 
 
 /* 3. When a link is hovered over OR is active, expand the line */
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1); /* Scale the line to its full width */
+}

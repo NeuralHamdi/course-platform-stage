@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 // Import the dedicated CSS for this component
 import '../style/CallToAction.css';
-
+import {Link} from 'react-router-dom';
 // Animation variants for the text elements to stagger their appearance
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,7 +27,9 @@ const itemVariants = {
 };
 
 
+
 export default function CallToAction() {
+  const MotionLink = motion(Link);
   return (
     // We add the class that controls our animated background
     <section className="cta__section">
@@ -39,16 +41,15 @@ export default function CallToAction() {
         viewport={{ once: true, amount: 0.5 }} // Animation happens once
       >
         <motion.h2 className="cta__title" variants={itemVariants}>
-          Ready to Transform Your Future?
+          Your Next Big Step Starts Here
         </motion.h2>
 
         <motion.p className="cta__subtitle" variants={itemVariants}>
-          Join thousands of successful professionals who have elevated their careers
-          with ProTrain Hub’s expert-led training.
+          Join a community of innovators at Centre AAH. Turn expert-led knowledge into tangible career results, starting today.
         </motion.p>
 
-        <motion.a
-          href="/Programs"
+        <MotionLink
+          to="/Programs"
           className="cta__button"
           variants={itemVariants}
           whileHover={{ scale: 1.05, y: -5 }}
@@ -56,7 +57,7 @@ export default function CallToAction() {
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
         >
           Enroll Today <FaArrowRight className="ms-2" />
-        </motion.a>
+        </MotionLink>
       </motion.div>
     </section>
   );

@@ -14,7 +14,7 @@ import {
     BsClockFill, 
     BsCreditCardFill,
     BsFileTextFill,
-    BsPersonVcardFill,
+ 
     BsBoxArrowRight,
     BsThreeDots,
     BsMortarboardFill // Une icône pour le logo
@@ -30,8 +30,8 @@ const Sidebar = () => {
         { to: "modules", icon: <BsStack />, text: "Modules" },
         { to: "sessions", icon: <BsClockFill />, text: "Sessions" },
         { to: "payments", icon: <BsCreditCardFill />, text: "Payments" },
-        { to: "inscriptions", icon: <BsFileTextFill />, text: "Inscriptions" },
-        { to: "admins", icon: <BsPersonVcardFill />, text: "Admins" },
+        { to: "subscriptions", icon: <BsFileTextFill />, text: "Subscriptions" },
+
     ];
 const logoutfun=()=>{
     logout();
@@ -46,7 +46,7 @@ const logoutfun=()=>{
                 <div className="sidebar-header d-flex align-items-center justify-content-between mb-4">
                     <div className='d-flex align-items-center gap-2'>
                         <BsMortarboardFill size={30} className="text-primary" />
-                        <span className="fs-5 fw-bold">ProTrain Hub</span>
+                        <span className="fs-5 fw-bold">Centre AAH</span>
                     </div>
                     <BsThreeDots size={20} className="text-muted"/>
                 </div>

@@ -30,7 +30,7 @@ const Navbar = () => {
             height="70"
             className="d-inline-block align-top me-2"
           />
-          <span>Pro train hub</span>
+          <span>Centre AAH</span>
         </Link>
      
         <button
@@ -61,11 +61,9 @@ const Navbar = () => {
 
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-center flex-grow-1 pe-3">
-              {/* --- CHANGE 2: Use NavLink for each item and remove the 'active' class manually. --- */}
-              {/* --- NavLink will add the 'active' class automatically. --- */}
+        
               <li className="nav-item">
-                {/* Add the 'end' prop to Home to prevent it from matching other routes */}
-                <NavLink className="nav-link mx-lg-2" end   to="/">Home</NavLink>
+                <NavLink className="nav-link mx-lg-2" end to="/">Home</NavLink>
               </li>
               <li className="nav-item">
                 <NavLink className="nav-link mx-lg-2" to="/Programs">Programs</NavLink>

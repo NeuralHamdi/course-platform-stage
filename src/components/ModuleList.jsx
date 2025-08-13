@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import axios from "axios";
-import heroImage from '../assets/hero-image.jpg'; // Using a placeholder
+import Hero from "../assets/hero-image.jpg"; // Default image
+
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaSpinner } from "react-icons/fa";
@@ -70,7 +70,7 @@ function ModuleList() {
                                 <div className="module-list__card">
                                     <div className="module-list__card-image-container">
                                         <img
-                                            src={heroImage} // Replace with module.image_url if available
+                                            src={module.url_images || Hero} 
                                             alt={module.titre}
                                             className="module-list__card-img"
                                         />

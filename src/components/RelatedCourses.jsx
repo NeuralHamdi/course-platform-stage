@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import { Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; // Needed for course links
 import { motion } from 'framer-motion'; // Needed for animations
@@ -51,7 +51,7 @@ const RelatedCourses = ({ courseId }) => {
   if (!relatedCourses || relatedCourses.length === 0) {
     // You can choose to return an empty div or a message instead of null if preferred
     return <div>
-        lkngfdngfd
+      <p className="text-center">No related courses found.</p>
     </div>;
   }
 
@@ -71,7 +71,7 @@ const RelatedCourses = ({ courseId }) => {
             animate="show"
           >
             <div className="card h-100 shadow-sm border-0 gradient-border-card">
-              <img className="card-img-top" src={Hero} alt={course.titre} />
+              <img className="card-img-top" src={course.url_images || Hero} alt={course.titre} />
               <div className="card-body d-flex flex-column">
                 {/* Use Link for internal navigation */}
                 <Link to={`/courses/${course.id}`} className="text-decoration-none text-dark flex-grow-1 pe-2">

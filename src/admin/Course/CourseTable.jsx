@@ -73,7 +73,7 @@ const CourseTable = ({ data, onViewDetails, onEdit, onDelete, deleteMutation }) 
 
     if (!data?.data || data.data.length === 0) {
         return (
-            <div className="text-center py-5 card">
+            <div className="text-center py-5">
                 <FaSearch className="fa-3x text-muted mb-3" />
                 <p className="text-muted">Aucun cours trouvé avec les critères actuels.</p>
             </div>
@@ -81,108 +81,104 @@ const CourseTable = ({ data, onViewDetails, onEdit, onDelete, deleteMutation }) 
     }
 
     return (
-        <div className="card">
-            <div className="card-body p-0">
-                <div className="table-responsive">
-                    <table className="table table-hover table-striped mb-0">
-                        <thead className="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Image</th>
-                                <th>Titre</th>
-                                <th style={{minWidth: '200px'}}>Description</th>
-                                <th>Niveau</th>
-                                <th>Durée</th>
-                                <th className="text-center">
-                                    <FaUsers className="me-1" />
-                                    Inscriptions
-                                </th>
-                                <th>Module</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.data.map((course) => (
-                                <tr key={course.id}>
-                                    <td>
-                                        <span className="badge bg-primary">{course.id}</span>
-                                    </td>
-                                    <td>
-                                        <img 
-                                            src={course.url_image} 
-                                            alt={course.titre} 
-                                            className="img-thumbnail" 
-                                            style={{ width: '60px', height: '45px', objectFit: 'cover' }} 
-                                        />
-                                    </td>
-                                    <td>
-                                        <div className="fw-semibold">{course.titre}</div>
-                                        <small className="text-muted">
-                                            Créé le {new Date(course.created_at).toLocaleDateString('fr-FR')}
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <div 
-                                            className="text-truncate" 
-                                            style={{ maxWidth: '250px' }} 
-                                            title={course.description}
-                                        >
-                                            {course.description}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className={`badge ${getLevelBadge(course.niveau).class}`}>
-                                            {getLevelBadge(course.niveau).text}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <FaClock className="me-1 text-muted" />
-                                        {formatDuration(course.duree, course.duree_unite)}
-                                    </td>
-                                    <td>
-                                        {/* REPLACED: Prix column with Enrollment count */}
-                                        {formatEnrollmentCount(course.total_enrollments || 0)}
-                                    </td>
-                                    <td>
-                                        <span className="badge bg-info text-dark">
-                                            Module {course.module_id}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div className="d-flex">
-                                            <Button 
-                                                variant="link" 
-                                                className="p-0 me-2 text-info" 
-                                                onClick={() => onViewDetails(course.id)} 
-                                                title="Voir détails"
-                                            >
-                                                <FaEye />
-                                            </Button>
-                                            <Button 
-                                                variant="link" 
-                                                className="p-0 me-2 text-warning" 
-                                                onClick={() => onEdit(course)} 
-                                                title="Modifier"
-                                            >
-                                                <FaPen />
-                                            </Button>
-                                            <Button 
-                                                variant="link" 
-                                                className="p-0 text-danger" 
-                                                onClick={() => onDelete(course.id, course.titre)} 
-                                                disabled={deleteMutation.isLoading} 
-                                                title="Supprimer"
-                                            >
-                                                <FaTrash />
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div className="table-responsive">
+            <table className="table table-hover table-striped mb-0">
+                <thead className="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Titre</th>
+                        <th style={{minWidth: '200px'}}>Description</th>
+                        <th>Niveau</th>
+                        <th>Durée</th>
+                        <th className="text-center">
+                            <FaUsers className="me-1" />
+                            Inscriptions
+                        </th>
+                        <th>Module</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.data.map((course) => (
+                        <tr key={course.id}>
+                            <td>
+                                <span className="badge bg-primary">{course.id}</span>
+                            </td>
+                            <td>
+                                <img 
+                                    src={course.url_image} 
+                                    alt={course.titre} 
+                                    className="img-thumbnail" 
+                                    style={{ width: '60px', height: '45px', objectFit: 'cover' }} 
+                                />
+                            </td>
+                            <td>
+                                <div className="fw-semibold">{course.titre}</div>
+                                <small className="text-muted">
+                                    Créé le {new Date(course.created_at).toLocaleDateString('fr-FR')}
+                                </small>
+                            </td>
+                            <td>
+                                <div 
+                                    className="text-truncate" 
+                                    style={{ maxWidth: '250px' }} 
+                                    title={course.description}
+                                >
+                                    {course.description}
+                                </div>
+                            </td>
+                            <td>
+                                <span className={`badge ${getLevelBadge(course.niveau).class}`}>
+                                    {getLevelBadge(course.niveau).text}
+                                </span>
+                            </td>
+                            <td>
+                                <FaClock className="me-1 text-muted" />
+                                {formatDuration(course.duree, course.duree_unite)}
+                            </td>
+                            <td>
+                                {/* REPLACED: Prix column with Enrollment count */}
+                                {formatEnrollmentCount(course.total_enrollments || 0)}
+                            </td>
+                            <td>
+                                <span className="badge bg-info text-dark">
+                                    Module {course.module_id}
+                                </span>
+                            </td>
+                            <td>
+                                <div className="d-flex">
+                                    <Button 
+                                        variant="link" 
+                                        className="p-0 me-2 text-info" 
+                                        onClick={() => onViewDetails(course.id)} 
+                                        title="Voir détails"
+                                    >
+                                        <FaEye />
+                                    </Button>
+                                    <Button 
+                                        variant="link" 
+                                        className="p-0 me-2 text-warning" 
+                                        onClick={() => onEdit(course)} 
+                                        title="Modifier"
+                                    >
+                                        <FaPen />
+                                    </Button>
+                                    <Button 
+                                        variant="link" 
+                                        className="p-0 text-danger" 
+                                        onClick={() => onDelete(course.id, course.titre)} 
+                                        disabled={deleteMutation.isLoading} 
+                                        title="Supprimer"
+                                    >
+                                        <FaTrash />
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

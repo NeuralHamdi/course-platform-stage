@@ -4,8 +4,10 @@ import { Card, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { FaCreditCard, FaLock, FaShieldAlt, FaArrowLeft, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
 import apiClient from '../Api/apiClient';
 
-// Import the new CSS file
+
+
 import '../style/PaymentCheckout.css';
+
 
 const PaymentCheckout = ({ selectedSession, currentUser, onBack, onPaymentStart }) => {
   const [loading, setLoading] = useState(false);
@@ -70,8 +72,8 @@ const PaymentCheckout = ({ selectedSession, currentUser, onBack, onPaymentStart 
             <Card.Body>
               <Row>
                 <Col md={4}>
-                  <img 
-                    src={selectedSession.cours?.url_image || 'https://via.placeholder.com/300x200/007BFF/FFFFFF?text=Cours'} 
+                  <img
+                    src={selectedSession.cours?.url_images}
                     alt={selectedSession.cours?.titre}
                     className="summary-image"
                   />
@@ -181,7 +183,7 @@ const PaymentCheckout = ({ selectedSession, currentUser, onBack, onPaymentStart 
 
               <div className="text-center mt-4">
                 <small className="text-muted d-block mb-2">Nous acceptons :</small>
-                {/* TIP: Replace these with real SVGs from your project's assets */}
+              
                 <div className="d-flex justify-content-center gap-3 payment-methods">
                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" />
                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" />

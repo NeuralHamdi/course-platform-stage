@@ -16,6 +16,12 @@ const services = [
     { id: 'strategy', icon: Settings, title: "Strategic Digital Advisory", features: ["Digital Transformation Roadmap", "Technology Stack Auditing & Optimization", "IT Process & Workflow Improvement", "CIO-as-a-Service"] }
 ];
 
+const comprehensiveMessage = {
+    title: "...And Everything Else",
+    description: "These are just our most popular service areas. Our team of experts can tackle any technology challenge, from the most cutting-edge innovations to complex legacy system problems. If you have a unique requirement not listed here, we'd love to discuss how we can help.",
+    actionText: "Discuss Your Custom Needs"
+};
+
 const ConsultingServices = () => {
     const [activeService, setActiveService] = useState(services[0].id);
     const currentService = services.find(s => s.id === activeService);
@@ -72,7 +78,6 @@ const ConsultingServices = () => {
                     let dx = particles[a].x - particles[b].x;
                     let dy = particles[a].y - particles[b].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < 110) {
                         opacityValue = 1 - (distance / 110);
                         ctx.strokeStyle = `rgba(165, 180, 252, ${opacityValue})`;
@@ -103,8 +108,8 @@ const ConsultingServices = () => {
 
         handleResize(); // Initial call
         animate();
-
         window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationFrameId);
@@ -113,7 +118,6 @@ const ConsultingServices = () => {
     
     return (
         <div className="consulting-blueprint-wrapper">
-      
             <section className="hero-immersive-section">
                 <canvas ref={canvasRef} id="interactive-network-canvas"></canvas>
                 <div className="hero-content-container">
@@ -180,35 +184,48 @@ const ConsultingServices = () => {
                           </div>
                         </div>
                     </div>
+
+                    {/* Comprehensive Message Section */}
+                    <div className="comprehensive-message" data-aos="fade-up" data-aos-delay="400">
+                        <h3>{comprehensiveMessage.title}</h3>
+                        <p style={{ maxWidth: '600px', margin: '0 auto 2rem auto' }}>
+                            {comprehensiveMessage.description}
+                        </p>
+                        <a 
+                            href="https://wa.me/+212618317633?text=Hello!%20I%20have%20a%20custom%20technology%20requirement." 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="comprehensive-cta"
+                        >
+                            {comprehensiveMessage.actionText} <ArrowRight size={18} />
+                        </a>
+                    </div>
                 </div>
             </section>
 
-       <section className="final-cta-fullwidth-section py-5">
-  <div className="container text-center">
-    <h2 data-aos="fade-up">Ready to Build Something Exceptional?</h2>
-
-    <p 
-      className="lead mx-auto mb-4 w-100" 
-      style={{ maxWidth: '600px' }} 
-      data-aos="fade-up" 
-      data-aos-delay="100"
-    >
-      Your transformation starts with a conversation. Let's discuss your vision.
-    </p>
-
-    <div data-aos="fade-up" data-aos-delay="200">
-      <a 
-        href="https://wa.me/+212625426096?text=Hello!%20I'm%20interested%20in%20consultation." 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="btn btn-primary d-inline-flex align-items-center gap-2 rounded-pill px-4 py-2"
-      >
-        <MessageCircle size={24}/> Book a Free Consultation
-      </a>
-    </div>
-  </div>
-</section>
-
+            <section className="final-cta-fullwidth-section py-5">
+                <div className="container text-center">
+                    <h2 data-aos="fade-up">Ready to Build Something Exceptional?</h2>
+                    <p 
+                        className="lead mx-auto mb-4 w-100 " 
+                        style={{ maxWidth: '600px' }} 
+                        data-aos="fade-up" 
+                        data-aos-delay="100"
+                    >
+                        Your transformation starts with a conversation. Let's discuss your vision.
+                    </p>
+                    <div data-aos="fade-up" data-aos-delay="200">
+                        <a 
+                            href="https://wa.me/+212618317633?text=Hello!%20I'm%20interested%20in%20consultation." 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="btn btn-primary d-inline-flex align-items-center gap-2 rounded-pill px-4 py-2"
+                        >
+                            <MessageCircle size={24}/> Book a  Consultation
+                        </a>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };

@@ -185,7 +185,7 @@ const DashboardPage = () => {
                             <>
                                 <Button 
                                     as={Link} 
-                                    to={`/courses/${inscription.session.cours.id}/content`} 
+                                    to={`/courses/${inscription.session.cours.id}`} 
                                     variant="primary"
                                     size="sm"
                                 >

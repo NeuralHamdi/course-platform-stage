@@ -5,23 +5,23 @@ import { FaFileExcel } from 'react-icons/fa';
 const CourseDetailsModal = ({ show, handleClose, data, isLoading, onDownloadRoster }) => {
   const courseData = data;
 
-  // Helper to get a Bootstrap badge class and text based on the course level
+  // IMPROVED: Helper now returns a `bgClass` property instead of the reserved keyword 'class'.
   const getLevelBadge = (level) => {
     switch (level) {
-      case 'Beginner': return { class: 'bg-success', text: 'Débutant' };
-      case 'Intermediate': return { class: 'bg-warning', text: 'Intermédiaire' };
-      case 'Advanced': return { class: 'bg-danger', text: 'Avancé' };
-      default: return { class: 'bg-secondary', text: level };
+      case 'Beginner': return { bgClass: 'success', text: 'Débutant' };
+      case 'Intermediate': return { bgClass: 'warning', text: 'Intermédiaire' };
+      case 'Advanced': return { bgClass: 'danger', text: 'Avancé' };
+      default: return { bgClass: 'secondary', text: level };
     }
   };
   
-  // Helper to get a Bootstrap badge class and text for the session status
+  // IMPROVED: Helper now returns a `bgClass` property.
   const getSessionStatusBadge = (status) => {
     switch (status) {
-      case 'active': return { class: 'bg-success', text: 'Active' };
-      case 'a_venir': return { class: 'bg-info', text: 'À venir' };
-      case 'terminee': return { class: 'bg-secondary', text: 'Terminée' };
-      default: return { class: 'bg-dark', text: status };
+      case 'active': return { bgClass: 'success', text: 'Active' };
+      case 'a_venir': return { bgClass: 'info', text: 'À venir' };
+      case 'terminee': return { bgClass: 'secondary', text: 'Terminée' };
+      default: return { bgClass: 'dark', text: status };
     }
   };
 
@@ -35,8 +35,11 @@ const CourseDetailsModal = ({ show, handleClose, data, isLoading, onDownloadRost
   // Helper to format currency
   const formatCurrency = (amount) => new Intl.NumberFormat('fr-FR', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'MAD' // Changed to Moroccan Dirham based on your location, adjust if needed
   }).format(parseFloat(amount));
+  
+  // IMPROVED: Call the helper function once and store the result
+  const levelInfo = courseData ? getLevelBadge(courseData.niveau) : null;
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
@@ -65,12 +68,14 @@ const CourseDetailsModal = ({ show, handleClose, data, isLoading, onDownloadRost
               <div className="col-md-8">
                 <h5>{courseData.titre}</h5>
                 <p><strong>Description:</strong> {courseData.description}</p>
-                <p><strong>Niveau:</strong> <Badge bg={getLevelBadge(courseData.niveau).class}>
-                    {getLevelBadge(courseData.niveau).text}
+                {/* --- FIXED: The badge now displays correctly --- */}
+                <p><strong>Niveau:</strong>{' '}
+                  <Badge bg={levelInfo.bgClass}>
+                    {levelInfo.text}
                   </Badge>
                 </p>
                 <p><strong>Durée:</strong> {courseData.duree} {courseData.duree_unite}</p>
-               
+                {/* NOTE: Consider displaying the module name instead of its ID for better UX */}
                 <p><strong>Module:</strong> {courseData.module_id}</p>
                 <p><strong>Créé le:</strong> {formatDate(courseData.created_at)}</p>
               </div>
@@ -79,7 +84,8 @@ const CourseDetailsModal = ({ show, handleClose, data, isLoading, onDownloadRost
             <h6>À propos du cours</h6>
             <p>{courseData.about}</p>
             <h6>Objectifs d'apprentissage</h6>
-            {courseData.objectifs?.length > 0 ? (
+            {/* IMPROVED: Added Array.isArray check for robustness */}
+            {Array.isArray(courseData.objectifs) && courseData.objectifs.length > 0 ? (
               <ul>
                 {courseData.objectifs.map((objectif, index) => <li key={index}>{objectif}</li>)}
               </ul>
@@ -87,46 +93,49 @@ const CourseDetailsModal = ({ show, handleClose, data, isLoading, onDownloadRost
               <p className="text-muted">Aucun objectif spécifié.</p>
             )}
 
-            {/* --- Sessions Section (NEW) --- */}
+            {/* --- Sessions Section --- */}
             <hr />
             <h6>Sessions programmées</h6>
-            {courseData.sessions && courseData.sessions.length > 0 ? (
+            {Array.isArray(courseData.sessions) && courseData.sessions.length > 0 ? (
               <ListGroup>
-                {courseData.sessions.map(session => (
-                  <ListGroup.Item key={session.id} className="mb-2 border rounded">
-                    <div className="d-flex w-100 justify-content-between align-items-center">
-                      <h6 className="mb-1">{session.titre}</h6>
-                      <Button 
-                        variant="outline-success" 
-                        size="sm" 
-                        onClick={() => onDownloadRoster(session.id, session.titre)}
-                        title={`Télécharger la liste pour la session "${session.titre}"`}
-                      >
-                         <FaFileExcel className="me-1" /> Télécharger la liste
-                      </Button>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center mt-2">
-                        <div>
+                {courseData.sessions.map(session => {
+                  // IMPROVED: Call helper once per session
+                  const sessionStatusInfo = getSessionStatusBadge(session.statut);
+                  return (
+                    <ListGroup.Item key={session.id} className="mb-2 border rounded">
+                      <div className="d-flex w-100 justify-content-between align-items-center">
+                        <h6 className="mb-1">{session.titre}</h6>
+                        <Button 
+                          variant="outline-success" 
+                          size="sm" 
+                          onClick={() => onDownloadRoster(session.id, session.titre)}
+                          title={`Télécharger la liste pour la session "${session.titre}"`}
+                        >
+                           <FaFileExcel className="me-1" /> Télécharger la liste
+                        </Button>
+                      </div>
+                      <div className="d-flex justify-content-between align-items-center mt-2">
+                          <div>
                             <p className="mb-1">
-                                <strong>Statut:</strong> <Badge bg={getSessionStatusBadge(session.statut).class}>
-                                    {getSessionStatusBadge(session.statut).text}
-                                </Badge>
+                              <strong>Statut:</strong>{' '}
+                              <Badge bg={sessionStatusInfo.bgClass}>
+                                {sessionStatusInfo.text}
+                              </Badge>
                             </p>
                             <p className="mb-1"><strong>Dates:</strong> Du {formatDate(session.date_debut)} au {formatDate(session.date_fin)}</p>
-                        </div>
-                        <div className="text-end">
+                          </div>
+                          <div className="text-end">
                             <p className="mb-1"><strong>Prix:</strong> {formatCurrency(session.prix)}</p>
                             <p className="mb-0"><strong>Places:</strong> {session.places_disponibles} / {session.capacite_maximale}</p>
-                        </div>
-                    </div>
-                  </ListGroup.Item>
-                ))}
+                          </div>
+                      </div>
+                    </ListGroup.Item>
+                  );
+                })}
               </ListGroup>
             ) : (
               <p className="text-muted">Aucune session n'est actuellement programmée pour ce cours.</p>
             )}
-            {/* --- End of Sessions Section --- */}
-
           </>
         ) : (
           <p className="text-danger text-center">Impossible de charger les détails du cours.</p>

@@ -403,3 +403,107 @@ section {
     width: auto;
   }
 }
+
+
+
+/* ========== COMPREHENSIVE MESSAGE SECTION ========== */
+/* Add this to your existing consulting-services.css file */
+
+.comprehensive-message {
+  margin-top: 4rem;
+  padding: 3rem 2rem;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.comprehensive-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.comprehensive-message:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.comprehensive-message h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.comprehensive-message p {
+  font-size: 1.05rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.comprehensive-cta {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.comprehensive-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--primary);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.comprehensive-cta:hover {
+  color: var(--white);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.comprehensive-cta:hover::before {
+  left: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .comprehensive-message {
+    margin-top: 3rem;
+    padding: 2rem 1.5rem;
+  }
+  
+  .comprehensive-message h3 {
+    font-size: 1.5rem;
+  }
+  
+  .comprehensive-message p {
+    font-size: 1rem;
+  }
+}

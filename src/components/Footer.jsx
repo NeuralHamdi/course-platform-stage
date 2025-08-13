@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+
 import { 
     FaTwitter, 
     FaFacebookF, 
@@ -113,11 +113,11 @@ export default function Footer() {
           <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
             <div className="footer-about">
               <h5 className="footer-title footer-logo">
-                <img src={Logo} alt="ProTrain Hub Logo" className="footer-logo-img" />
-                ProTrain Hub
+                <img src={Logo} alt="Centre AAH Logo" className="footer-logo-img" />
+                Centre AAH
               </h5>
               <p className="footer-description">
-                A leading E-learning platform offering interactive courses for companies and individuals.
+                Centre AAH is your strategic partner for professional development, delivering expert-led courses and technology consulting to empower individuals and organizations.
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function Footer() {
         </div>
         <hr className="footer-divider" />
         <div className="text-center footer-copyright">
-          © {new Date().getFullYear()} ProTrain Hub. All Rights Reserved.
+          © {new Date().getFullYear()} Centre AAH. All Rights Reserved.
         </div>
       </div>
     </motion.footer>

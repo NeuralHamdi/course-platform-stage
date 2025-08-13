@@ -25,6 +25,7 @@ const GestionSession = () => {
   const [coursId, setCoursId] = useState('');
   const [disponibles, setDisponibles] = useState(false);
   const [page, setPage] = useState(1);
+  const [statut, setStatut] = useState('');
   
   // Modal states
   const [addModalVisible, setAddModalVisible] = useState(false);
@@ -44,7 +45,7 @@ const GestionSession = () => {
 
   // Query for sessions list with pagination
   const { data, isLoading, isError, isFetching, error } = useQuery({
-    queryKey: ['sessions-paginated', { search, coursId, disponibles, page }],
+    queryKey: ['sessions-paginated', { search, coursId, disponibles, statut, page }],
     queryFn: fetchSessions,
     keepPreviousData: true,
     staleTime: 30000,
@@ -126,6 +127,7 @@ const GestionSession = () => {
     setCoursId('');
     setDisponibles(false);
     setPage(1);
+    setStatut('');
   };
 
   const handlePageChange = (newPage) => {
@@ -235,6 +237,10 @@ const GestionSession = () => {
             setCoursId={setCoursId}
             disponibles={disponibles}
             setDisponibles={setDisponibles}
+            statut={statut}
+            setStatut={setStatut}
+
+            
             coursesData={coursesData}
             isLoadingCourses={isLoadingCourses}
             resetFilters={resetFilters}
