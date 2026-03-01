@@ -23,9 +23,9 @@ function ModulesPage() {
         queryKey: ['modules'],
         queryFn: async () => {
             try {
-                console.log('Fetching modules...');
+           
                 const response = await apiClient.get('/modules');
-                console.log('API Response:', response.data);
+              
                 
                 // Gestion plus flexible de la structure de données
              let moduleData = [];
@@ -255,8 +255,7 @@ function ModulesPage() {
                     
                     {modules && modules.length > 0 ? (
                         modules.map((module, index) => {
-                            // Debug pour voir la structure des données
-                            console.log(`Module ${index}:`, module);
+                        
                             
                             return (
                                 <tr key={module.id || index}>

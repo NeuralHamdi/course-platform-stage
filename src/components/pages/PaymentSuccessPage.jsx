@@ -24,8 +24,7 @@ const PaymentSuccessPage = () => {
         const fetchPaymentStatus = async () => {
             try {
                 const response = await apiClient.get(`/payments/status/${inscriptionId}`);
-                console.log('API Response:', response.data); // Pour debugging
-                
+             
                 setPaymentData(response.data);
                 
                 // 🔧 FIX: Adaptez selon la structure réelle de votre API
@@ -58,7 +57,7 @@ const PaymentSuccessPage = () => {
                 
                 // Fetch status initial
                 const initialResponse = await apiClient.get(`/payments/status/${inscriptionId}`);
-                console.log('Initial API Response:', initialResponse.data); // Pour debugging
+               
                 
                 setPaymentData(initialResponse.data);
                 

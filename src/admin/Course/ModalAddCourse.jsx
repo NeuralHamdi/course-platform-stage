@@ -72,7 +72,7 @@ const handleSubmit = (e) => {
     module_id: parseInt(formData.module_id, 10),
   };
 
-  console.log('🛠 Données finales envoyées :', preparedData);
+
   mutation.mutate(preparedData);
 };
 

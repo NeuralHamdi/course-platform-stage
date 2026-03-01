@@ -33,7 +33,7 @@ const CoursePage = () => {
     const {token} = useAuth();
       const fetchModules = async () => {
         const response = await apiClient.get("/modules/all");
-        return response.data;
+       return Array.isArray(response.data) ? response.data : response.data.data || [];
     };
 
     const { data: modules = [], isLoading: isLoadingModules } = useQuery({

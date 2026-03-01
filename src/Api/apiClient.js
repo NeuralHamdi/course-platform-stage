@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const apiClient = axios.create({
-    baseURL: 'http://mon-projet.test/api', // Your API base URL
+    baseURL: 'http://127.0.0.1:8000/api', // Your API base URL
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',

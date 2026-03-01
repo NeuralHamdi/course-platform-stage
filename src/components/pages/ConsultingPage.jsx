@@ -192,7 +192,7 @@ const ConsultingServices = () => {
                             {comprehensiveMessage.description}
                         </p>
                         <a 
-                            href="https://wa.me/+212618317633?text=Hello!%20I%20have%20a%20custom%20technology%20requirement." 
+                            href="https://wa.me/+21261831752?text=Hello!%20I%20have%20a%20custom%20technology%20requirement."
                             target="_blank" 
                             rel="noopener noreferrer" 
                             className="comprehensive-cta"
@@ -216,7 +216,7 @@ const ConsultingServices = () => {
                     </p>
                     <div data-aos="fade-up" data-aos-delay="200">
                         <a 
-                            href="https://wa.me/+212618317633?text=Hello!%20I'm%20interested%20in%20consultation." 
+                            href="https://wa.me/+21261831745?text=Hello!%20I'm%20interested%20in%20consultation."
                             target="_blank" 
                             rel="noopener noreferrer" 
                             className="btn btn-primary d-inline-flex align-items-center gap-2 rounded-pill px-4 py-2"

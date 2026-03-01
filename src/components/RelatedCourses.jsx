@@ -12,10 +12,10 @@ import '../style/Programms.css'; // This CSS file contains the .card, .gradient-
 import apiClient from '../Api/apiClient';
 const RelatedCourses = ({ courseId }) => {
   // Function to fetch related courses
-  console.log("Fetching related courses for courseId:", courseId);
+ 
   const fetchRelatedCourses = async () => {
     const response = await apiClient.get(`/courses/${courseId}/related`);
-    console.log("Related courses fetched:", response.data);
+
     return response.data;
   };
 

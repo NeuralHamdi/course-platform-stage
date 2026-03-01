@@ -12,7 +12,7 @@ import apiClient from '../Api/apiClient';
 const contactInfoCards = [
   { icon: <FaMapMarkerAlt />, text: "Localisation du centre : Bureaux N° 16 & 17 3 eme Etage Immob Guedira lot Elmassira N° P1883 , Agadir, Morocco, 810000" },
   { icon: <FaEnvelope />, text: "info@centre-aah.com" },
-  { icon: <FaPhoneAlt />, text: "+1 (800) 555-0199" }
+  { icon: <FaPhoneAlt />, text: "065858548" }
 ];
 
 const faqData = [
